@@ -1,19 +1,19 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config'; // <--- 1. Import this
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { PrismaModule } from '../prisma/prisma.module';
+// import { PrismaModule } from '../prisma/prisma.module'; <--- DELETE THIS
+import { DatabaseModule } from './database.module'; // <--- ADD THIS
 import { PlansModule } from './plans/plans.module';
 import { OrdersModule } from './orders/orders.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    // 2. Add ConfigModule.forRoot() at the TOP of imports
     ConfigModule.forRoot({
-      isGlobal: true, // Makes env variables available everywhere
+      isGlobal: true,
     }),
-    PrismaModule, 
+    DatabaseModule, // <--- ADD THIS (replaces PrismaModule)
     PlansModule, 
     OrdersModule, 
     AuthModule,

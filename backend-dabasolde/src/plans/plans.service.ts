@@ -1,26 +1,27 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
+import { Injectable, Inject } from '@nestjs/common';
+import { Pool } from 'pg'; // <--- Import the Driver
 
 @Injectable()
 export class PlansService {
-  constructor(private prisma: PrismaService) {}
+  // Inject the pool we created in DatabaseModule
+  constructor(@Inject('DATABASE_POOL') private pool: Pool) {}
 
   async findAll() {
-    // 1. Fetch all active plans from the database
-    const plans = await this.prisma.plan.findMany({
-      where: { isActive: true },
-      orderBy: { amount: 'asc' }, // Sort by smallest amount first
-    });
+    // 1. Run the Raw SQL Query
+    // Note: We use double quotes "Plan" because Prisma creates tables with capital letters
+    const result = await this.pool.query(
+      `SELECT * FROM "Plan" WHERE "isActive" = true ORDER BY amount ASC`
+    );
 
-    // 2. Transform the data for the Frontend
-    return plans.map((plan) => {
+    // 2. Transform the data (result.rows contains the actual data)
+    return result.rows.map((plan) => {
       const discountAmount = plan.amount * (plan.discountPercent / 100);
       const finalPrice = plan.amount - discountAmount;
 
       return {
         id: plan.id,
         title: `${plan.amount} DH`, 
-        amount: plan.amount, // <--- ADDED THIS LINE (Crucial for the Frontend)
+        amount: plan.amount, 
         originalPrice: plan.amount,
         finalPrice: Math.round(finalPrice),
         discount: plan.discountPercent,
