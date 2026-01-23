@@ -1,14 +1,19 @@
 /* src/pages/Home.css */
 
-/* 1. Global Container Fix (Crucial for mobile edges) */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px; /* Adds space on left/right for phones */
-  width: 100%;
+/* 1. Reset & Global Box Sizing */
+* {
   box-sizing: border-box;
 }
 
+/* 2. Container Styling */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  width: 100%;
+}
+
+/* 3. Hero Section (Desktop Default) */
 .hero-section {
   display: flex;
   align-items: center;
@@ -17,6 +22,7 @@
   padding: 60px 0;
   gap: 40px;
   position: relative;
+  direction: rtl; /* Force Arabic Direction */
 }
 
 /* Background Glow */
@@ -65,7 +71,7 @@
 .hero-buttons {
   display: flex;
   gap: 15px;
-  flex-wrap: wrap; /* Allows buttons to stack if screen is tiny */
+  flex-wrap: wrap;
 }
 
 /* Buttons */
@@ -118,50 +124,58 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* --- MOBILE RESPONSIVENESS (Phones & Tablets) --- */
-@media (max-width: 960px) {
+/* =========================================
+   MOBILE RESPONSIVENESS (The Fix)
+   ========================================= */
+@media screen and (max-width: 960px) {
+  
   .hero-section {
-    /* Stack items vertically */
-    flex-direction: column-reverse; /* Image Top, Text Bottom */
+    /* Force Layout Change */
+    flex-direction: column-reverse !important;
     text-align: center;
-    padding: 30px 0;
+    padding: 40px 0;
     gap: 30px;
-    min-height: auto; /* Allow height to shrink on mobile */
+    height: auto;
+    min-height: auto;
   }
 
   .hero-text {
     width: 100%;
+    max-width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center aligns text and buttons */
+    align-items: center;
   }
 
+  /* Force font size down so it fits screen */
   .hero-title {
-    font-size: 2.2rem; /* Smaller font for mobile */
+    font-size: 2rem !important;
+    line-height: 1.3;
   }
 
   .hero-desc {
     font-size: 1rem;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     max-width: 100%;
   }
 
   .hero-buttons {
     justify-content: center;
     width: 100%;
+    flex-direction: column;
   }
 
   .btn-primary, .btn-outline {
-    width: 100%; /* Full width buttons for easier tapping */
+    width: 100%;
     margin-bottom: 10px;
   }
 
   .hero-image-wrapper {
     width: 100%;
+    margin-bottom: 20px;
   }
 
   .hero-image {
-    max-width: 80%; /* Don't be too huge on mobile */
-    margin: 0 auto;
+    max-width: 80%;
   }
 }
