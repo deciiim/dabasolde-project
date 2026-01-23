@@ -1,9 +1,9 @@
-import { Controller, Get, Post, Body, Param, UploadedFile, UseInterceptors, UseGuards, Patch ,Delete} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UploadedFile, UseInterceptors, UseGuards, Patch, Delete } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
-import { AuthGuard } from '@nestjs/passport'; // 1. Import AuthGuard
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('orders')
 export class OrdersController {
@@ -37,20 +37,23 @@ export class OrdersController {
 
   // --- ADMIN ENDPOINTS (Protected) ---
 
-  @UseGuards(AuthGuard('jwt')) // 2. Protect this route (Login required)
+  @UseGuards(AuthGuard('jwt'))
   @Get()
   findAll() {
     return this.ordersService.findAll();
   }
 
-  @UseGuards(AuthGuard('jwt')) // 3. Protect this route (Login required)
+  @UseGuards(AuthGuard('jwt'))
   @Patch(':id/status')
   updateStatus(@Param('id') id: string, @Body('status') status: string) {
-    return this.ordersService.updateStatus(id, status);
+    // FIX: Convert 'id' string to number using '+'
+    return this.ordersService.updateStatus(+id, status);
   }
-  @UseGuards(AuthGuard('jwt')) // Protect so only Admin can delete
+
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.ordersService.remove(id);
+    // FIX: Convert 'id' string to number using '+'
+    return this.ordersService.remove(+id);
   }
 }

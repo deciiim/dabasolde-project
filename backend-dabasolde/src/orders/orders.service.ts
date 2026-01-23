@@ -1,70 +1,91 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
+import { Injectable, Inject, NotFoundException } from '@nestjs/common';
+import { Pool } from 'pg';
 
 @Injectable()
 export class OrdersService {
-  constructor(private prisma: PrismaService) {}
+  // Inject the database connection pool (Same pattern as PlansService)
+  constructor(@Inject('DATABASE_POOL') private pool: Pool) {}
 
   // --- ADMIN: Get all orders (Newest first) ---
   async findAll() {
-    return this.prisma.order.findMany({
-      orderBy: { createdAt: 'desc' },
-    });
+    const result = await this.pool.query(
+      `SELECT * FROM "Order" ORDER BY "createdAt" DESC`
+    );
+    return result.rows;
   }
 
-  // --- ADMIN: Update order status (PENDING -> COMPLETED/REJECTED) ---
-  async updateStatus(id: string, status: string) {
-    try {
-      return await this.prisma.order.update({
-        where: { id },
-        data: { status },
-      });
-    } catch (error) {
+  // --- ADMIN: Update order status ---
+  async updateStatus(id: number, status: string) {
+    const result = await this.pool.query(
+      `UPDATE "Order" SET status = $1 WHERE id = $2 RETURNING *`,
+      [status, id]
+    );
+
+    if (result.rowCount === 0) {
       throw new NotFoundException(`Order with ID ${id} not found`);
     }
+    return result.rows[0];
   }
 
-  // --- PUBLIC: Create a new order ---
+  // --- PUBLIC: Create a new order (Direct Insert) ---
   async create(data: any, receiptFilename: string | null) {
-    // Generate a short ID (e.g., DS-8392)
+    // 1. Generate Tracking Ref
     const shortRef = `DS-${Math.floor(1000 + Math.random() * 9000)}`;
 
-    const order = await this.prisma.order.create({
-      data: {
-        shortRef: shortRef,
-        amount: Number(data.amount), // Ensure it's a number
-        price: Number(data.price),
-        phone: data.phone,
-        fullName: data.fullName,
-        paymentMethod: data.paymentMethod,
-        bank: data.bank || null,
-        receiptImage: receiptFilename, // Save the filename
-        status: 'PENDING',
-      },
-    });
+    // 2. Prepare Query
+    const query = `
+      INSERT INTO "Order" 
+      ("shortRef", amount, price, phone, "fullName", "paymentMethod", bank, "receiptImage", status)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'PENDING')
+      RETURNING "shortRef"
+    `;
+
+    // 3. Prepare Values (Clean numbers)
+    const values = [
+      shortRef,
+      Number(data.amount),
+      Number(data.price),
+      data.phone,
+      data.fullName,
+      data.paymentMethod,
+      data.bank || null,
+      receiptFilename || null
+    ];
+
+    // 4. Execute
+    const result = await this.pool.query(query, values);
+    const newOrder = result.rows[0];
 
     return { 
       success: true, 
-      orderId: order.shortRef,
+      orderId: newOrder.shortRef,
       message: "Order created successfully" 
     };
   }
 
-  // --- PUBLIC: Find one order by Tracking Ref (DS-XXXX) ---
+  // --- PUBLIC: Find one order by Tracking Ref ---
   async findOne(ref: string) {
-    const order = await this.prisma.order.findUnique({
-      where: { shortRef: ref },
-    });
-    if (!order) throw new NotFoundException('Order not found');
-    return order;
+    const result = await this.pool.query(
+      `SELECT * FROM "Order" WHERE "shortRef" = $1`,
+      [ref]
+    );
+
+    if (result.rows.length === 0) {
+      throw new NotFoundException('Order not found');
+    }
+    return result.rows[0];
   }
-  async remove(id: string) {
-    try {
-      return await this.prisma.order.delete({
-        where: { id },
-      });
-    } catch (error) {
+
+  // --- ADMIN: Delete an order ---
+  async remove(id: number) {
+    const result = await this.pool.query(
+      `DELETE FROM "Order" WHERE id = $1 RETURNING *`,
+      [id]
+    );
+
+    if (result.rowCount === 0) {
       throw new NotFoundException(`Order with ID ${id} not found`);
     }
+    return result.rows[0];
   }
 }

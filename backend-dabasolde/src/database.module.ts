@@ -9,11 +9,17 @@ import { ConfigService } from '@nestjs/config';
       provide: 'DATABASE_POOL',
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
+        const databaseUrl = configService.get('DATABASE_URL');
+        
+        // --- ADD THIS LINE TO DEBUG ---
+        console.log("MY DATABASE URL IS:", databaseUrl); 
+        // -----------------------------
+
+        const isLocal = databaseUrl.includes('localhost') || databaseUrl.includes('127.0.0.1');
+
         return new Pool({
-          connectionString: configService.get('DATABASE_URL'),
-          ssl: {
-            rejectUnauthorized: false, // This fixes the SSL error on Neon/Render
-          },
+          connectionString: databaseUrl,
+          ssl: isLocal ? false : { rejectUnauthorized: false },
         });
       },
     },
