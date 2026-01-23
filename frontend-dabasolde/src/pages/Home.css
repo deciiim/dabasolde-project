@@ -1,33 +1,28 @@
 /* src/pages/Home.css */
 
-/* 1. Reset & Global Box Sizing */
+/* 1. Reset */
 * {
   box-sizing: border-box;
 }
 
-/* 2. Container Styling */
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px; /* Safe space for phone edges */
+  padding: 0 20px;
   width: 100%;
 }
 
-/* 3. SMART HERO SECTION */
+/* 2. HERO SECTION - NOW USING GRID (Like Plans.css) */
 .hero-section {
-  display: flex;
+  display: grid;
+  /* This creates 2 columns automatically. If screen < 900px, it becomes 1 column. */
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   align-items: center;
-  justify-content: space-between;
+  gap: 40px;
   min-height: 85vh;
   padding: 60px 0;
-  gap: 40px;
   position: relative;
-  direction: rtl; /* Force Arabic Direction */
-  
-  /* --- THE MAGIC FIX --- */
-  /* This makes it act like Plans.css */
-  /* If screen is small, items wrap automatically */
-  flex-wrap: wrap-reverse; 
+  direction: rtl; /* Arabic Alignment */
 }
 
 /* Background Glow */
@@ -42,21 +37,12 @@
   pointer-events: none;
 }
 
-/* --- FLEX ITEMS (Smart Sizing) --- */
-/* These act like grid cells now */
+/* --- TEXT SIDE --- */
 .hero-text {
-  flex: 1 1 400px; /* Grow, Shrink, but try to stay 400px wide */
-  max-width: 600px;
   z-index: 2;
+  text-align: right; /* Ensure Arabic text aligns right */
 }
 
-.hero-image-wrapper {
-  flex: 1 1 400px; /* Grow, Shrink, but try to stay 400px wide */
-  display: flex;
-  justify-content: center;
-}
-
-/* --- TYPOGRAPHY --- */
 .hero-title {
   font-size: 3.5rem;
   font-weight: 900;
@@ -86,6 +72,30 @@
   flex-wrap: wrap;
 }
 
+/* --- IMAGE SIDE --- */
+.hero-image-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-image {
+  width: 100%;
+  max-width: 550px;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  /* Animation */
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0px); }
+}
+
 /* --- BUTTONS --- */
 .btn-primary, .btn-outline {
   padding: 14px 28px;
@@ -110,41 +120,41 @@
   color: white;
 }
 
-/* --- IMAGE --- */
-.hero-image {
-  width: 100%;
-  max-width: 500px;
-  height: auto;
-  border-radius: 20px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* --- MOBILE TWEAKS --- */
-/* Just centering things when they wrap */
+/* --- MOBILE ADJUSTMENTS --- */
 @media screen and (max-width: 960px) {
   .hero-section {
     text-align: center;
     padding: 40px 0;
-    justify-content: center;
+    gap: 30px;
+    height: auto;
+    /* On mobile, standard Grid usually puts Text top, Image bottom. 
+       If you want Image on TOP, uncomment the next line: */
+    /* display: flex; flex-direction: column-reverse; */
   }
 
   .hero-text {
-    align-items: center; /* Center items in flex column */
-    max-width: 100%;
+    text-align: center; /* Center text on mobile */
+    margin: 0 auto;
   }
 
   .hero-title {
-    font-size: 2.2rem; /* Fix huge font on mobile */
+    font-size: 2.2rem;
+  }
+  
+  .hero-desc {
+    margin: 0 auto 30px auto;
   }
 
   .hero-buttons {
     justify-content: center;
-    width: 100%;
   }
-
+  
   .btn-primary, .btn-outline {
-    width: 100%; /* Full width buttons for easy tapping */
+    width: 100%;
     margin-bottom: 10px;
+  }
+  
+  .hero-image {
+    max-width: 80%; /* Shrink image slightly on phone */
   }
 }

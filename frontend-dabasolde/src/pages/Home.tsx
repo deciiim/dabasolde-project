@@ -31,9 +31,11 @@ export default function Home() {
         {/* Right Side: Image */}
         <div className="hero-image-wrapper">
           <img 
-            src="https://img.freepik.com/free-vector/digital-wallet-concept-illustration_114360-7561.jpg?w=740&t=st=1705912345~exp=1705912945~hmac=..." 
+            /* DEBUG FIX: Added width constraints directly here */
+            src="https://img.freepik.com/free-vector/digital-wallet-concept-illustration_114360-7561.jpg?w=740" 
             alt="DabaSolde Service" 
-            className="hero-image" 
+            className="hero-image"
+            style={{ maxWidth: '100%', height: 'auto' }} 
           />
         </div>
 
