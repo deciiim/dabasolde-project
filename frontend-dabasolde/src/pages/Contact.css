@@ -1,0 +1,146 @@
+/* src/pages/Contact.css */
+
+.contact-wrapper {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 20px;
+}
+
+/* Background Glow Animation */
+.contact-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(144, 38, 143, 0.15) 0%, transparent 70%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Glass Card */
+.contact-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 50px 40px;
+  border-radius: 24px;
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  animation: fadeUp 0.6s ease-out;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.contact-title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  margin-bottom: 15px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.contact-desc {
+  color: #a1a1aa;
+  margin-bottom: 40px;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* Buttons Container */
+.contact-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Shared Button Styles */
+.contact-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-decoration: none;
+  font-size: 1.2rem;
+  padding: 18px;
+  border-radius: 14px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* WhatsApp Button (Brand Green) */
+.wa-btn {
+  background: #25D366;
+  color: white;
+  border: none;
+  box-shadow: 0 5px 20px rgba(37, 211, 102, 0.2);
+}
+
+.wa-btn:hover {
+  background: #1ebc57;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+}
+
+/* Email Button (Outline) */
+.mail-btn {
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.mail-btn:hover {
+  border-color: #e3005b;
+  background: rgba(227, 0, 91, 0.1);
+  color: #e3005b;
+}
+
+/* Icons in buttons */
+.btn-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Work Hours Section */
+.work-hours {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: #666;
+}
+
+.status-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: #22c55e; /* Green for Open */
+  border-radius: 50%;
+  margin-left: 8px;
+  box-shadow: 0 0 10px #22c55e;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 600px) {
+  .contact-card {
+    padding: 30px 20px;
+  }
+  
+  .contact-title {
+    font-size: 2rem;
+  }
+}

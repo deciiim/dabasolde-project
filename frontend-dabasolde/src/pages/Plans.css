@@ -1,0 +1,238 @@
+/* src/pages/Plans.css */
+
+:root {
+  --primary-gradient: linear-gradient(135deg, #90268f 0%, #e3005b 100%);
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glow: 0 0 20px rgba(227, 0, 91, 0.15);
+}
+
+/* Background Animation Effect */
+.plans-container {
+  padding: 60px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* The Background Blur Spot (Optional Polish) */
+.plans-container::before {
+  content: '';
+  position: absolute;
+  top: -10%; left: 50%;
+  transform: translateX(-50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(144, 38, 143, 0.15) 0%, transparent 70%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.plans-header {
+  text-align: center;
+  margin-bottom: 50px;
+  position: relative;
+  z-index: 1;
+}
+
+.plans-header h2 {
+  font-size: 2.8rem;
+  font-weight: 900;
+  margin: 0;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  color: transparent;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+}
+
+.plans-header p {
+  color: #a1a1aa;
+  font-size: 1.1rem;
+  margin-top: 10px;
+}
+
+/* --- GRID LAYOUT --- */
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 25px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* --- CARD DESIGN --- */
+.plan-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  padding: 40px 30px;
+  text-align: center;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 420px;
+}
+
+.plan-card:hover {
+  transform: translateY(-10px);
+  border-color: #e3005b;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), var(--glow);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Custom Card Special Style */
+.plan-card.custom-card {
+  border: 2px dashed rgba(227, 0, 91, 0.3);
+  background: linear-gradient(180deg, rgba(227, 0, 91, 0.05) 0%, transparent 100%);
+}
+
+.plan-card.custom-card:hover {
+  border-color: #e3005b;
+  border-style: solid;
+}
+
+/* Badge */
+.discount-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: #e3005b;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  box-shadow: 0 5px 15px rgba(227, 0, 91, 0.3);
+  z-index: 2;
+}
+
+/* Icons & Titles */
+.account-icon {
+  font-size: 3.5rem;
+  margin-bottom: 15px;
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.1));
+}
+
+.plan-title {
+  font-size: 1.1rem;
+  color: #d1d5db;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+/* Pricing Typography */
+.plan-amount-box {
+  margin: 20px 0;
+}
+
+.plan-amount {
+  font-size: 3rem;
+  font-weight: 900;
+  color: white;
+  line-height: 1;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.currency {
+  font-size: 1.2rem;
+  color: #90268f;
+  font-weight: 700;
+  vertical-align: super;
+  margin-right: 5px;
+}
+
+/* Prices Container */
+.price-container {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+  padding: 15px;
+  margin-bottom: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.old-price {
+  display: block;
+  font-size: 0.95rem;
+  color: #9ca3af;
+  text-decoration: line-through;
+  margin-bottom: 5px;
+}
+
+.final-price {
+  display: block;
+  font-size: 1.6rem;
+  color: #22c55e;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+/* Custom Input Styling */
+.input-wrapper {
+  position: relative;
+  margin: 20px 0;
+}
+
+.custom-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #555;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+  outline: none;
+  font-family: 'Cairo', sans-serif;
+  transition: 0.3s;
+}
+
+.custom-input:focus {
+  border-color: #e3005b;
+}
+
+.custom-input::placeholder {
+  color: #444;
+  font-size: 2rem;
+}
+
+.input-hint {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 8px;
+}
+
+/* Button */
+.btn-buy {
+  width: 100%;
+  padding: 16px;
+  border-radius: 14px;
+  border: none;
+  font-size: 1.1rem;
+  font-weight: 800;
+  font-family: 'Cairo', sans-serif;
+  color: white;
+  background: var(--primary-gradient);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(144, 38, 143, 0.3);
+}
+
+.btn-buy:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(227, 0, 91, 0.4);
+}
+
+.btn-buy:disabled {
+  background: #333;
+  color: #666;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}

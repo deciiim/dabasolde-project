@@ -1,0 +1,43 @@
+// 1. Generator: Tells Prisma to generate the JavaScript client
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 2. Datasource: Connects to your Database (PostgreSQL)
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// --- MODELS ---
+
+model Plan {
+  id              String   @id @default(uuid())
+  title           String
+  amount          Int      // e.g. 500
+  originalPrice   Int      // e.g. 500
+  discountPercent Int      // e.g. 12
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+}
+
+model Order {
+  id            String   @id @default(uuid())
+  shortRef      String   @unique // The simple ID like DS-1234
+  createdAt     DateTime @default(now())
+  
+  // Plan Info
+  amount        Int
+  price         Int      // Final price paid
+  
+  // Customer Info
+  phone         String
+  fullName      String?  // New: Ahmed Alami
+  
+  // Payment Info
+  paymentMethod String   // BANK or CASH
+  bank          String?  // CIH, Attijari...
+  receiptImage  String?  // Path to the uploaded image
+  
+  status        String   @default("PENDING") // PENDING, PAID, COMPLETED
+}
