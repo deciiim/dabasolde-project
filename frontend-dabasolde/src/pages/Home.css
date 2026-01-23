@@ -9,11 +9,11 @@
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 20px; /* Safe space for phone edges */
   width: 100%;
 }
 
-/* 3. Hero Section (Desktop Default) */
+/* 3. SMART HERO SECTION */
 .hero-section {
   display: flex;
   align-items: center;
@@ -23,6 +23,11 @@
   gap: 40px;
   position: relative;
   direction: rtl; /* Force Arabic Direction */
+  
+  /* --- THE MAGIC FIX --- */
+  /* This makes it act like Plans.css */
+  /* If screen is small, items wrap automatically */
+  flex-wrap: wrap-reverse; 
 }
 
 /* Background Glow */
@@ -37,13 +42,21 @@
   pointer-events: none;
 }
 
-/* --- LEFT SIDE: TEXT --- */
+/* --- FLEX ITEMS (Smart Sizing) --- */
+/* These act like grid cells now */
 .hero-text {
-  flex: 1;
+  flex: 1 1 400px; /* Grow, Shrink, but try to stay 400px wide */
   max-width: 600px;
   z-index: 2;
 }
 
+.hero-image-wrapper {
+  flex: 1 1 400px; /* Grow, Shrink, but try to stay 400px wide */
+  display: flex;
+  justify-content: center;
+}
+
+/* --- TYPOGRAPHY --- */
 .hero-title {
   font-size: 3.5rem;
   font-weight: 900;
@@ -57,7 +70,6 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  position: relative;
 }
 
 .hero-desc {
@@ -74,7 +86,7 @@
   flex-wrap: wrap;
 }
 
-/* Buttons */
+/* --- BUTTONS --- */
 .btn-primary, .btn-outline {
   padding: 14px 28px;
   border-radius: 12px;
@@ -92,29 +104,13 @@
   box-shadow: 0 10px 20px rgba(227, 0, 91, 0.3);
 }
 
-.btn-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 30px rgba(227, 0, 91, 0.5);
-}
-
 .btn-outline {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
 }
 
-.btn-outline:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: white;
-}
-
-/* --- RIGHT SIDE: IMAGE --- */
-.hero-image-wrapper {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-}
-
+/* --- IMAGE --- */
 .hero-image {
   width: 100%;
   max-width: 500px;
@@ -124,58 +120,31 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* =========================================
-   MOBILE RESPONSIVENESS (The Fix)
-   ========================================= */
+/* --- MOBILE TWEAKS --- */
+/* Just centering things when they wrap */
 @media screen and (max-width: 960px) {
-  
   .hero-section {
-    /* Force Layout Change */
-    flex-direction: column-reverse !important;
     text-align: center;
     padding: 40px 0;
-    gap: 30px;
-    height: auto;
-    min-height: auto;
+    justify-content: center;
   }
 
   .hero-text {
-    width: 100%;
+    align-items: center; /* Center items in flex column */
     max-width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
   }
 
-  /* Force font size down so it fits screen */
   .hero-title {
-    font-size: 2rem !important;
-    line-height: 1.3;
-  }
-
-  .hero-desc {
-    font-size: 1rem;
-    margin-bottom: 25px;
-    max-width: 100%;
+    font-size: 2.2rem; /* Fix huge font on mobile */
   }
 
   .hero-buttons {
     justify-content: center;
     width: 100%;
-    flex-direction: column;
   }
 
   .btn-primary, .btn-outline {
-    width: 100%;
+    width: 100%; /* Full width buttons for easy tapping */
     margin-bottom: 10px;
-  }
-
-  .hero-image-wrapper {
-    width: 100%;
-    margin-bottom: 20px;
-  }
-
-  .hero-image {
-    max-width: 80%;
   }
 }

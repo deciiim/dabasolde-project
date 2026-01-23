@@ -18,11 +18,11 @@ body {
   color: white;
 }
 
-/* 3. FIX: Allow full width */
+/* 3. FIX: Allow full width (Removes the box that trapped your layout) */
 #root {
   max-width: 100%;
   margin: 0;
-  padding: 0;       /* Removed the 2rem padding */
-  text-align: left; /* Removed center alignment */
+  padding: 0;
+  text-align: left;
   width: 100%;
 }
