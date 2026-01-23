@@ -1,50 +1,28 @@
-/* src/App.css (or index.css) - FULL REPLACEMENT */
+/* src/App.css - CLEAN VERSION */
 
-/* 1. Global Reset & Box Sizing */
+/* 1. Global Reset */
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  
-  /* Prevent horizontal scroll issues on mobile */
-  overflow-x: hidden;
+  overflow-x: hidden; /* Stops side-scrolling on phone */
 }
 
 /* 2. Body Styling */
 body {
   margin: 0;
   padding: 0;
-  width: 100%;
+  min-width: 320px;
   min-height: 100vh;
-  background-color: #000; /* Dark background to match your theme */
+  background-color: #000;
   color: white;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* 3. Root Container Fix (Crucial for Mobile) */
+/* 3. FIX: Allow full width */
 #root {
-  max-width: 100%; /* Was 1280px */
+  max-width: 100%;
   margin: 0;
-  padding: 0;      /* Was 2rem - This was causing the squish! */
-  text-align: left; /* Was center - This was breaking your flexbox */
+  padding: 0;       /* Removed the 2rem padding */
+  text-align: left; /* Removed center alignment */
   width: 100%;
-}
-
-/* 4. Optional: Global Link Styles */
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-/* 5. Utility: Force full width on mobile if needed */
-@media (max-width: 768px) {
-  body, #root {
-    width: 100vw;
-    overflow-x: hidden;
-  }
 }
