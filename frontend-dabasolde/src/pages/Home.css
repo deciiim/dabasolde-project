@@ -1,6 +1,5 @@
 /* src/pages/Home.css */
 
-/* 1. Reset */
 * {
   box-sizing: border-box;
 }
@@ -10,19 +9,20 @@
   margin: 0 auto;
   padding: 0 20px;
   width: 100%;
+  overflow: hidden; /* Extra safety against scrolling */
 }
 
-/* 2. HERO SECTION - NOW USING GRID (Like Plans.css) */
+/* 2. HERO GRID LAYOUT */
 .hero-section {
   display: grid;
-  /* This creates 2 columns automatically. If screen < 900px, it becomes 1 column. */
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  /* Smart columns: 2 on desktop, 1 on mobile */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   align-items: center;
   gap: 40px;
   min-height: 85vh;
   padding: 60px 0;
   position: relative;
-  direction: rtl; /* Arabic Alignment */
+  direction: rtl;
 }
 
 /* Background Glow */
@@ -31,8 +31,8 @@
   position: absolute;
   top: 50%; left: 0;
   transform: translate(-50%, -50%);
-  width: 600px; height: 600px;
-  background: radial-gradient(circle, rgba(144, 38, 143, 0.1) 0%, transparent 70%);
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(144, 38, 143, 0.15) 0%, transparent 70%);
   z-index: -1;
   pointer-events: none;
 }
@@ -40,11 +40,11 @@
 /* --- TEXT SIDE --- */
 .hero-text {
   z-index: 2;
-  text-align: right; /* Ensure Arabic text aligns right */
+  text-align: right;
 }
 
 .hero-title {
-  font-size: 3.5rem;
+  font-size: 3.2rem; /* Slightly smaller to fit better */
   font-weight: 900;
   line-height: 1.2;
   margin-bottom: 20px;
@@ -60,7 +60,7 @@
 
 .hero-desc {
   color: #a1a1aa;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   line-height: 1.6;
   margin-bottom: 30px;
   max-width: 90%;
@@ -77,17 +77,20 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%; /* Ensure wrapper fits container */
 }
 
 .hero-image {
-  width: 100%;
-  max-width: 550px;
-  height: auto;
+  width: 100%;      /* Take up available space */
+  max-width: 500px; /* But never bigger than 500px */
+  height: auto;     /* Keep aspect ratio */
   border-radius: 20px;
   box-shadow: 0 20px 50px rgba(0,0,0,0.5);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  /* Animation */
   animation: float 6s ease-in-out infinite;
+  
+  /* THIS IS THE KEY FIX FOR MOBILE: */
+  object-fit: contain; 
 }
 
 @keyframes float {
@@ -120,20 +123,19 @@
   color: white;
 }
 
-/* --- MOBILE ADJUSTMENTS --- */
-@media screen and (max-width: 960px) {
+/* --- MOBILE TWEAKS --- */
+@media screen and (max-width: 768px) {
   .hero-section {
     text-align: center;
-    padding: 40px 0;
+    padding: 30px 0;
     gap: 30px;
-    height: auto;
-    /* On mobile, standard Grid usually puts Text top, Image bottom. 
-       If you want Image on TOP, uncomment the next line: */
+    
+    /* OPTIONAL: Uncomment if you want Image ON TOP of text */
     /* display: flex; flex-direction: column-reverse; */
   }
 
   .hero-text {
-    text-align: center; /* Center text on mobile */
+    text-align: center;
     margin: 0 auto;
   }
 
@@ -154,7 +156,8 @@
     margin-bottom: 10px;
   }
   
+  /* Make image smaller on phone so it doesn't dominate */
   .hero-image {
-    max-width: 80%; /* Shrink image slightly on phone */
+    max-width: 85%; 
   }
 }

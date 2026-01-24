@@ -1,6 +1,10 @@
 import { Link } from 'react-router-dom';
 import './Home.css';
 
+// 1. Import the image from your assets folder
+import heroImg from '../assets/hero-img.jpg'; 
+// (Make sure the path matches where you saved it!)
+
 export default function Home() {
   return (
     <div className="container">
@@ -31,11 +35,9 @@ export default function Home() {
         {/* Right Side: Image */}
         <div className="hero-image-wrapper">
           <img 
-            /* DEBUG FIX: Added width constraints directly here */
-            src="https://img.freepik.com/free-vector/digital-wallet-concept-illustration_114360-7561.jpg?w=740" 
+            src={heroImg} 
             alt="DabaSolde Service" 
-            className="hero-image"
-            style={{ maxWidth: '100%', height: 'auto' }} 
+            className="hero-image" 
           />
         </div>
 

@@ -1,11 +1,15 @@
-/* src/App.css - CLEAN VERSION */
+/* src/App.css - FINAL OPTIMIZED VERSION */
 
-/* 1. Global Reset */
+/* 1. Global Reset & Safety */
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  overflow-x: hidden; /* Stops side-scrolling on phone */
+}
+
+/* IMPORTANT: This ensures padding doesn't make elements wider than the screen */
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
 /* 2. Body Styling */
@@ -16,13 +20,20 @@ body {
   min-height: 100vh;
   background-color: #000;
   color: white;
+  
+  /* FIX: Apply overflow control here to kill horizontal scroll */
+  overflow-x: hidden; 
+  width: 100%;
 }
 
-/* 3. FIX: Allow full width (Removes the box that trapped your layout) */
+/* 3. Root Container Fix */
 #root {
   max-width: 100%;
   margin: 0;
-  padding: 0;
-  text-align: left;
+  padding: 0;       /* Removes default Vite padding */
+  text-align: left; /* Removes default centering */
   width: 100%;
+  
+  /* Ensure the root container also respects the overflow */
+  overflow-x: hidden;
 }
