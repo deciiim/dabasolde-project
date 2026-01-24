@@ -1,16 +1,14 @@
 import { Link } from 'react-router-dom';
 import './Home.css';
-
-// 1. Import the image from your assets folder
+// Ensure this path matches exactly where you put the file in Step 1
 import heroImg from '../assets/hero-img.jpg'; 
-// (Make sure the path matches where you saved it!)
 
 export default function Home() {
   return (
     <div className="container">
       <section className="hero-section">
         
-        {/* Left Side: Text */}
+        {/* --- LEFT SIDE (Text + Mobile Image + Buttons) --- */}
         <div className="hero-text">
           <h1 className="hero-title">
             أسرع طريقة لشراء <br/>
@@ -21,6 +19,12 @@ export default function Home() {
             مرحباً بك في <strong>DabaSolde</strong>. منصتك الأولى لشراء حسابات مشحونة برصيد إنوي بتخفيضات تصل إلى 12%. 
             <br/>خدمة آمنة، تسليم فوري، ودعم تقني 24/7.
           </p>
+
+          {/* !!! CRITICAL CHANGE !!! */}
+          {/* This places the image BETWEEN text and buttons on Mobile */}
+          <div className="mobile-image-wrapper">
+            <img src={heroImg} alt="Mobile Display" className="hero-image-mobile" />
+          </div>
           
           <div className="hero-buttons">
             <Link to="/plans" className="btn-primary">
@@ -32,12 +36,12 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Right Side: Image */}
-        <div className="hero-image-wrapper">
+        {/* --- RIGHT SIDE (Desktop Image Only) --- */}
+        <div className="desktop-image-wrapper">
           <img 
             src={heroImg} 
-            alt="DabaSolde Service" 
-            className="hero-image" 
+            alt="Desktop Display" 
+            className="hero-image-desktop" 
           />
         </div>
 

@@ -1,5 +1,6 @@
 /* src/pages/Home.css */
 
+/* Safety Reset */
 * {
   box-sizing: border-box;
 }
@@ -9,20 +10,19 @@
   margin: 0 auto;
   padding: 0 20px;
   width: 100%;
-  overflow: hidden; /* Extra safety against scrolling */
+  overflow: hidden; /* Prevents internal scrolling */
 }
 
-/* 2. HERO GRID LAYOUT */
+/* --- DESKTOP LAYOUT (Default) --- */
 .hero-section {
   display: grid;
-  /* Smart columns: 2 on desktop, 1 on mobile */
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: 1fr 1fr; /* 2 Columns: Text | Image */
   align-items: center;
   gap: 40px;
   min-height: 85vh;
   padding: 60px 0;
   position: relative;
-  direction: rtl;
+  direction: rtl; /* Arabic Direction */
 }
 
 /* Background Glow */
@@ -37,14 +37,15 @@
   pointer-events: none;
 }
 
-/* --- TEXT SIDE --- */
+/* --- TEXT BLOCK --- */
 .hero-text {
   z-index: 2;
   text-align: right;
+  width: 100%;
 }
 
 .hero-title {
-  font-size: 3.2rem; /* Slightly smaller to fit better */
+  font-size: 3.2rem;
   font-weight: 900;
   line-height: 1.2;
   margin-bottom: 20px;
@@ -66,31 +67,27 @@
   max-width: 90%;
 }
 
-.hero-buttons {
-  display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
+/* --- IMAGES LOGIC --- */
+
+/* 1. Mobile Image Wrapper (Hidden on Desktop) */
+.mobile-image-wrapper {
+  display: none; 
 }
 
-/* --- IMAGE SIDE --- */
-.hero-image-wrapper {
+/* 2. Desktop Image Wrapper (Visible on Desktop) */
+.desktop-image-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%; /* Ensure wrapper fits container */
+  width: 100%;
 }
 
-.hero-image {
-  width: 100%;      /* Take up available space */
-  max-width: 500px; /* But never bigger than 500px */
-  height: auto;     /* Keep aspect ratio */
-  border-radius: 20px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+.hero-image-desktop {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  object-fit: contain;
   animation: float 6s ease-in-out infinite;
-  
-  /* THIS IS THE KEY FIX FOR MOBILE: */
-  object-fit: contain; 
 }
 
 @keyframes float {
@@ -100,6 +97,12 @@
 }
 
 /* --- BUTTONS --- */
+.hero-buttons {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
 .btn-primary, .btn-outline {
   padding: 14px 28px;
   border-radius: 12px;
@@ -123,41 +126,62 @@
   color: white;
 }
 
-/* --- MOBILE TWEAKS --- */
-@media screen and (max-width: 768px) {
+/* =========================================
+   MOBILE RESPONSIVENESS
+   ========================================= */
+@media screen and (max-width: 960px) {
+  
   .hero-section {
+    grid-template-columns: 1fr; /* Switch to 1 Column */
     text-align: center;
     padding: 30px 0;
-    gap: 30px;
-    
-    /* OPTIONAL: Uncomment if you want Image ON TOP of text */
-    /* display: flex; flex-direction: column-reverse; */
+    gap: 20px;
+    height: auto;
   }
 
+  /* 1. Hide the Side (Desktop) Image */
+  .desktop-image-wrapper {
+    display: none;
+  }
+
+  /* 2. Show the Middle (Mobile) Image */
+  .mobile-image-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 20px auto; /* Space between text and image */
+    width: 100%;
+  }
+
+  .hero-image-mobile {
+    width: 100%; 
+    max-width: 300px; /* Limits width so no scrolling happens */
+    height: auto;
+    object-fit: contain;
+    animation: float 6s ease-in-out infinite;
+  }
+
+  /* Text Alignment */
   .hero-text {
     text-align: center;
-    margin: 0 auto;
   }
 
   .hero-title {
     font-size: 2.2rem;
   }
-  
+
   .hero-desc {
-    margin: 0 auto 30px auto;
+    margin: 0 auto;
   }
 
+  /* Buttons align under the new image */
   .hero-buttons {
     justify-content: center;
+    margin-top: 20px;
+    width: 100%;
   }
-  
+
   .btn-primary, .btn-outline {
     width: 100%;
     margin-bottom: 10px;
-  }
-  
-  /* Make image smaller on phone so it doesn't dominate */
-  .hero-image {
-    max-width: 85%; 
   }
 }

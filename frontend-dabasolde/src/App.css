@@ -1,13 +1,12 @@
-/* src/App.css - FINAL OPTIMIZED VERSION */
+/* src/App.css */
 
-/* 1. Global Reset & Safety */
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 }
 
-/* IMPORTANT: This ensures padding doesn't make elements wider than the screen */
+/* 1. Global Box Sizing */
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -21,19 +20,20 @@ body {
   background-color: #000;
   color: white;
   
-  /* FIX: Apply overflow control here to kill horizontal scroll */
   overflow-x: hidden; 
   width: 100%;
+
+  /* --- FIX: Push content down so Fixed Navbar doesn't cover it --- */
+  padding-top: 80px; 
 }
 
-/* 3. Root Container Fix */
+/* 3. Root Container */
 #root {
   max-width: 100%;
   margin: 0;
-  padding: 0;       /* Removes default Vite padding */
-  text-align: left; /* Removes default centering */
+  padding: 0;
   width: 100%;
-  
-  /* Ensure the root container also respects the overflow */
   overflow-x: hidden;
 }
+
+/* Remove any old 'nav' styles here to let Navbar.css handle it */
