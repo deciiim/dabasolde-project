@@ -29,39 +29,65 @@ export class OrdersService {
 
   // --- PUBLIC: Create a new order (Direct Insert) ---
   async create(data: any, receiptFilename: string | null) {
-    // 1. Generate Tracking Ref
-    const shortRef = `DS-${Math.floor(1000 + Math.random() * 9000)}`;
+    try {
+      console.log('📦 Creating order with data:', {
+        amount: data.amount,
+        price: data.price,
+        phone: data.phone,
+        fullName: data.fullName,
+        paymentMethod: data.paymentMethod,
+        bank: data.bank,
+        productType: data.productType,
+        receiptFilename
+      });
 
-    // 2. Prepare Query
-    const query = `
-      INSERT INTO "Order" 
-      ("shortRef", amount, price, phone, "fullName", "paymentMethod", bank, "receiptImage", status, "productType")
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'PENDING', $9)
-      RETURNING "shortRef"
-    `;
+      // 1. Generate Tracking Ref
+      const shortRef = `DS-${Math.floor(1000 + Math.random() * 9000)}`;
 
-    // 3. Prepare Values (Clean numbers)
-    const values = [
-      shortRef,
-      Number(data.amount),
-      Number(data.price),
-      data.phone,
-      data.fullName,
-      data.paymentMethod,
-      data.bank || null,
-      receiptFilename || null,
-      data.productType || 'Standard Plan' // Default to 'Standard Plan' if not provided
-    ];
+      // 2. Prepare Query
+      const query = `
+        INSERT INTO "Order" 
+        ("shortRef", amount, price, phone, "fullName", "paymentMethod", bank, "receiptImage", status, "productType")
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'PENDING', $9)
+        RETURNING "shortRef"
+      `;
 
-    // 4. Execute
-    const result = await this.pool.query(query, values);
-    const newOrder = result.rows[0];
+      // 3. Prepare Values (Clean numbers)
+      const values = [
+        shortRef,
+        Number(data.amount),
+        Number(data.price),
+        data.phone,
+        data.fullName,
+        data.paymentMethod,
+        data.bank || null,
+        receiptFilename || null,
+        data.productType || 'Standard Plan' // Default to 'Standard Plan' if not provided
+      ];
 
-    return {
-      success: true,
-      orderId: newOrder.shortRef,
-      message: "Order created successfully"
-    };
+      console.log('📝 Executing query with values:', values);
+
+      // 4. Execute
+      const result = await this.pool.query(query, values);
+      const newOrder = result.rows[0];
+
+      console.log('✅ Order created successfully:', newOrder.shortRef);
+
+      return {
+        success: true,
+        orderId: newOrder.shortRef,
+        message: "Order created successfully"
+      };
+    } catch (error) {
+      console.error('❌ Error creating order:', error);
+      console.error('Error details:', {
+        message: error.message,
+        code: error.code,
+        detail: error.detail,
+        stack: error.stack
+      });
+      throw error; // Re-throw to let NestJS handle it
+    }
   }
 
   // --- PUBLIC: Find one order by Tracking Ref ---

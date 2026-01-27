@@ -3,10 +3,11 @@ import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { ConfigService } from '@nestjs/config'; // 1. Import ConfigService
+import { existsSync, mkdirSync } from 'fs';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  
+
   const configService = app.get(ConfigService);
   // We keep these variables, but we won't strictly enforce the URL for CORS anymore
   const frontendUrl = configService.get('FRONTEND_URL') || 'http://localhost:5173';
@@ -19,8 +20,15 @@ async function bootstrap() {
     credentials: true,
   });
   // --- FIX ENDS HERE ---
-  
-  app.useStaticAssets(join(process.cwd(), 'uploads'), {
+
+  // Ensure uploads directory exists
+  const uploadsDir = join(process.cwd(), 'uploads');
+  if (!existsSync(uploadsDir)) {
+    console.log('📁 Creating uploads directory...');
+    mkdirSync(uploadsDir, { recursive: true });
+  }
+
+  app.useStaticAssets(uploadsDir, {
     prefix: '/uploads/',
   });
 

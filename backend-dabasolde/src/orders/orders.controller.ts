@@ -7,7 +7,7 @@ import { AuthGuard } from '@nestjs/passport';
 
 @Controller('orders')
 export class OrdersController {
-  constructor(private readonly ordersService: OrdersService) {}
+  constructor(private readonly ordersService: OrdersService) { }
 
   // --- PUBLIC ENDPOINTS ---
 
@@ -22,12 +22,24 @@ export class OrdersController {
       },
     }),
   }))
-  create(
-    @Body() body: any, 
+  async create(
+    @Body() body: any,
     @UploadedFile() file: Express.Multer.File
   ) {
-    const receiptPath = file ? file.filename : null;
-    return this.ordersService.create(body, receiptPath);
+    try {
+      console.log('📨 Received order request');
+      console.log('Body:', body);
+      console.log('File:', file ? file.filename : 'No file');
+
+      const receiptPath = file ? file.filename : null;
+      const result = await this.ordersService.create(body, receiptPath);
+
+      console.log('✅ Order creation successful');
+      return result;
+    } catch (error) {
+      console.error('❌ Controller error:', error);
+      throw error;
+    }
   }
 
   @Get(':ref')

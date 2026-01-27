@@ -20,7 +20,7 @@ export default function Plans() {
   };
 
   const handleCustomBuy = () => {
-    if (!customAmount || customAmount < 500) return;
+    if (!customAmount || customAmount < 100) return;
     const finalPrice = Math.round(customAmount - (customAmount * 0.15));
     const customPlan: Plan = {
       id: 'custom',
@@ -59,18 +59,18 @@ export default function Plans() {
             <div className="input-wrapper">
               <input
                 type="number"
-                placeholder="500"
+                placeholder="100"
                 className="custom-input"
                 value={customAmount}
                 onChange={(e) => setCustomAmount(Number(e.target.value))}
               />
-              <div className="input-hint">أدخل المبلغ (Min 500 DH)</div>
+              <div className="input-hint">أدخل المبلغ (Min 100 DH)</div>
             </div>
           </div>
 
           <div>
             <div className="price-container">
-              {customAmount && customAmount >= 500 ? (
+              {customAmount && customAmount >= 100 ? (
                 <>
                   <span className="old-price">قيمة الرصيد: {customAmount} DH</span>
                   <span className="final-price">{Math.round(customAmount - (customAmount * 0.15))} DH</span>
@@ -83,7 +83,7 @@ export default function Plans() {
             <button
               className="btn-buy"
               onClick={handleCustomBuy}
-              disabled={!customAmount || customAmount < 500}
+              disabled={!customAmount || customAmount < 100}
             >
               شراء هذا الحساب 🚀
             </button>
