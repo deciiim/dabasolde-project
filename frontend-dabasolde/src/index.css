@@ -42,6 +42,8 @@ body {
   /* Enforce RTL globally implies Arabic-first interface */
   padding-top: 120px;
   /* Global spacing for fixed navbar */
+  padding-bottom: 100px;
+  /* Add space for fixed bottom navigation */
 }
 
 /* Modern Reset Utilities */
