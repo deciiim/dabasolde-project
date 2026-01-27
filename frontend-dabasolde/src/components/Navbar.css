@@ -1,22 +1,21 @@
-/* Navbar Container */
+/* src/components/Navbar.css */
+
 .navbar {
-  /* CHANGE: 'fixed' forces it to stay visible even with overflow:hidden */
-  position: fixed; 
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 80px; /* Define a height so we can calculate spacing */
-  z-index: 9999; /* Maximum priority */
-  
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 0; /* Adjusted padding since we set height */
-  transition: 0.3s;
-  
-  /* Flex centering for the container inside */
+  height: var(--header-height);
+  z-index: 50;
+
+  background: rgba(9, 9, 11, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
   display: flex;
   align-items: center;
+  transition: all 0.3s ease;
 }
 
 .nav-container {
@@ -24,127 +23,224 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 100%; /* Take full height of navbar */
+  height: 100%;
 }
 
-/* Logo */
+/* Logo Styles */
 .logo {
-  font-size: 1.8rem;
-  font-weight: 900;
-  color: white;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-main);
   text-decoration: none;
   font-family: 'Cairo', sans-serif;
   letter-spacing: -0.5px;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 0.5rem;
 }
 
 .logo-highlight {
-  background: linear-gradient(135deg, #90268f, #e3005b);
+  background: linear-gradient(135deg, var(--primary), var(--accent));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 .logo-icon {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
+  color: var(--accent);
   animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.1); opacity: 0.8; }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* Navigation Links */
 .nav-links {
   display: flex;
-  gap: 30px;
+  gap: 2rem;
   align-items: center;
 }
 
 .nav-link {
-  color: #a1a1aa;
+  color: var(--text-muted);
   text-decoration: none;
   font-weight: 600;
-  font-size: 1rem;
-  font-family: 'Cairo', sans-serif;
-  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border-radius: 12px;
+  position: relative;
+  padding: 0.5rem 0;
 }
 
 .nav-link:hover {
-  color: white;
-  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
 }
 
 .nav-link.active {
-  color: #e3005b;
-  background: rgba(227, 0, 91, 0.1);
+  color: var(--primary);
 }
 
-/* Icons within links */
-.icon svg {
-  width: 20px;
-  height: 20px;
-  margin-top: 2px;
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border-radius: 2px;
 }
 
-/* Mobile Menu Icon (Hamburger) */
+/* Mobile Menu Button */
 .menu-icon {
   display: none;
   cursor: pointer;
-  color: white;
+  color: var(--text-main);
+  background: var(--bg-card);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: 0.2s;
 }
 
-.menu-icon svg {
-  width: 30px;
-  height: 30px;
+.menu-icon:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
 }
 
-/* --- MOBILE RESPONSIVE STYLES --- */
+/* Mobile Responsive - FIXED BOTTOM NAV */
 @media (max-width: 768px) {
-  .menu-icon {
-    display: block; 
-  }
 
-  .nav-links {
-    position: absolute;
-    top: 80px; /* Matches navbar height so it sits exactly below */
-    left: 0;
-    width: 100%;
-    background: #000000; /* Solid black for better visibility */
-    flex-direction: column;
-    padding: 20px;
-    gap: 15px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    
-    /* Animation */
-    opacity: 0;
-    transform: translateY(-20px);
+  /* Hide the top navbar background on mobile, but keep Logo visible */
+  .navbar {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom: none;
+    height: auto;
+    padding: 10px 0;
     pointer-events: none;
-    transition: all 0.3s ease-in-out;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    /* Let clicks pass through to content behind header area if needed */
   }
 
-  /* When menu is open */
-  .nav-links.active {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: all;
+  /* Make sure Logo is still clickable and visible at top */
+  .logo {
+    pointer-events: auto;
+    background: rgba(9, 9, 11, 0.8);
+    backdrop-filter: blur(12px);
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 0 auto;
+    /* Center Horizontal */
   }
 
-  .nav-link {
-    width: 100%;
+  .nav-container {
     justify-content: center;
-    padding: 15px;
-    font-size: 1.1rem;
-    border: 1px solid rgba(255,255,255,0.08);
+    /* Center the flex content (logo) */
+  }
+
+  /* Hide the hamburger menu icon since we are using bottom nav */
+  .menu-icon {
+    display: none;
+  }
+
+  /* Transform Nav Links into Bottom Bar */
+  .nav-links {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    top: auto;
+    /* Override top positioning */
+    width: 100%;
+    height: 70px;
+    /* Fixed height for bottom bar */
+
+    background: rgba(9, 9, 11, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: none;
+
+    flex-direction: row;
+    /* Horizontal layout */
+    justify-content: space-around;
+    /* Evenly space icons */
+    padding: 0;
+    gap: 0;
+
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    z-index: 1000;
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Reset Mobile Nav Link Styles */
+  .nav-link {
+    flex-direction: column;
+    /* Icon above text */
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    border-radius: 0;
+    font-size: 0.75rem;
+    /* Smaller text for bottom nav */
+    padding: 5px 0;
+    gap: 4px;
+    color: var(--text-muted);
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    background: transparent;
+    border-color: transparent;
+  }
+
+  .nav-link svg {
+    width: 24px;
+    height: 24px;
+    margin-top: 0;
+  }
+
+  /* Active State for Bottom Nav */
+  .nav-link.active {
+    color: var(--primary);
+  }
+
+  .nav-link.active::after {
+    content: '';
+    position: absolute;
+    display: block;
+    top: 0;
+    /* Stripe on top */
+    bottom: auto;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 40px;
+    /* Width of the indicator */
+    height: 3px;
+    background: var(--accent);
+    box-shadow: 0 2px 10px var(--accent);
+    border-radius: 0 0 4px 4px;
   }
 }

@@ -1,187 +1,191 @@
 /* src/pages/Home.css */
 
-/* Safety Reset */
-* {
-  box-sizing: border-box;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  width: 100%;
-  overflow: hidden; /* Prevents internal scrolling */
-}
-
-/* --- DESKTOP LAYOUT (Default) --- */
+/* Hero Section */
 .hero-section {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* 2 Columns: Text | Image */
+  grid-template-columns: 1fr 1fr;
   align-items: center;
-  gap: 40px;
-  min-height: 85vh;
-  padding: 60px 0;
+  gap: 4rem;
+  /* Ensure minimum height accounts for header but allows scrolling */
+  min-height: calc(100vh - var(--header-height));
+  padding: 4rem 0;
   position: relative;
-  direction: rtl; /* Arabic Direction */
+  overflow: hidden;
+  /* Be careful with this if content overflows */
 }
 
-/* Background Glow */
+/* Mobile specific spacing adjustments */
+@media (max-width: 768px) {
+  .hero-section {
+    /* Global App.css handles top/bottom padding now or we keep it additive */
+    /* Let's keep a bit of internal padding but rely mainly on the wrapper for clearance */
+    padding-top: 2rem;
+    min-height: auto;
+  }
+}
+
+/* Background Glow Effect */
 .hero-section::before {
   content: '';
   position: absolute;
-  top: 50%; left: 0;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
-  width: 500px; height: 500px;
+  width: 600px;
+  height: 600px;
   background: radial-gradient(circle, rgba(144, 38, 143, 0.15) 0%, transparent 70%);
   z-index: -1;
   pointer-events: none;
 }
 
-/* --- TEXT BLOCK --- */
+/* Text Content */
 .hero-text {
-  z-index: 2;
-  text-align: right;
-  width: 100%;
+  z-index: 10;
+  max-width: 600px;
 }
 
 .hero-title {
-  font-size: 3.2rem;
+  font-size: 3.5rem;
   font-weight: 900;
-  line-height: 1.2;
-  margin-bottom: 20px;
-  color: white;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  color: var(--text-main);
 }
 
 .highlight {
-  background: linear-gradient(135deg, #90268f 0%, #e3005b 100%);
+  background: linear-gradient(135deg, var(--primary), var(--accent));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 .hero-desc {
-  color: #a1a1aa;
-  font-size: 1.1rem;
+  color: var(--text-muted);
+  font-size: 1.15rem;
   line-height: 1.6;
-  margin-bottom: 30px;
-  max-width: 90%;
+  margin-bottom: 2.5rem;
 }
 
-/* --- IMAGES LOGIC --- */
-
-/* 1. Mobile Image Wrapper (Hidden on Desktop) */
-.mobile-image-wrapper {
-  display: none; 
+/* Buttons */
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
 }
 
-/* 2. Desktop Image Wrapper (Visible on Desktop) */
-.desktop-image-wrapper {
+.btn-primary,
+.btn-outline {
+  padding: 0.8rem 2rem;
+  border-radius: var(--radius);
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: white;
+  box-shadow: 0 4px 15px rgba(227, 0, 91, 0.4);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(227, 0, 91, 0.5);
+}
+
+.btn-outline {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
+  backdrop-filter: blur(10px);
+}
+
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: white;
+  transform: translateY(-2px);
+}
+
+/* Hero Image Wrapper */
+.hero-image-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  position: relative;
 }
 
-.hero-image-desktop {
+.hero-image {
   width: 100%;
-  max-width: 500px;
+  max-width: 550px;
   height: auto;
-  object-fit: contain;
+  filter: drop-shadow(0 0 20px rgba(144, 38, 143, 0.3));
   animation: float 6s ease-in-out infinite;
 }
 
 @keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
-  100% { transform: translateY(0px); }
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
 }
 
-/* --- BUTTONS --- */
-.hero-buttons {
-  display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
-}
-
-.btn-primary, .btn-outline {
-  padding: 14px 28px;
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 1rem;
-  text-decoration: none;
-  transition: 0.3s;
-  text-align: center;
-  display: inline-block;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #90268f, #e3005b);
-  color: white;
-  box-shadow: 0 10px 20px rgba(227, 0, 91, 0.3);
-}
-
-.btn-outline {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
-}
-
-/* =========================================
-   MOBILE RESPONSIVENESS
-   ========================================= */
-@media screen and (max-width: 960px) {
-  
+/* Mobile Responsive */
+@media (max-width: 968px) {
   .hero-section {
-    grid-template-columns: 1fr; /* Switch to 1 Column */
+    grid-template-columns: 1fr;
     text-align: center;
-    padding: 30px 0;
-    gap: 20px;
+    padding: 2rem 0;
+    gap: 3rem;
     height: auto;
   }
 
-  /* 1. Hide the Side (Desktop) Image */
-  .desktop-image-wrapper {
-    display: none;
-  }
-
-  /* 2. Show the Middle (Mobile) Image */
-  .mobile-image-wrapper {
-    display: flex;
-    justify-content: center;
-    margin: 20px auto; /* Space between text and image */
-    width: 100%;
-  }
-
-  .hero-image-mobile {
-    width: 100%; 
-    max-width: 300px; /* Limits width so no scrolling happens */
-    height: auto;
-    object-fit: contain;
-    animation: float 6s ease-in-out infinite;
-  }
-
-  /* Text Alignment */
   .hero-text {
-    text-align: center;
+    margin: 0 auto;
+    order: 2;
+    /* Text below image on mobile usually looks better, but standard is top. Let's keep text top? No, image top often better for retention. Let's try standard flow. */
+    order: 1;
+    /* Keep text top for now as per previous design */
   }
 
   .hero-title {
-    font-size: 2.2rem;
+    font-size: 2.5rem;
   }
 
   .hero-desc {
-    margin: 0 auto;
+    font-size: 1rem;
+    margin-bottom: 2rem;
   }
 
-  /* Buttons align under the new image */
   .hero-buttons {
     justify-content: center;
-    margin-top: 20px;
+    flex-direction: column;
     width: 100%;
   }
 
-  .btn-primary, .btn-outline {
+  .btn-primary,
+  .btn-outline {
     width: 100%;
-    margin-bottom: 10px;
+  }
+
+  .hero-image-wrapper {
+    order: 0;
+    /* Image top on mobile look? Or below? Let's check previous. Previous had hidden desktop, shown mobile. */
+    order: 0;
+    /* Let's put image on top for visual impact */
+    margin-bottom: 1rem;
+  }
+
+  .hero-image {
+    max-width: 320px;
   }
 }

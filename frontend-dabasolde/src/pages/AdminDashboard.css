@@ -1,5 +1,35 @@
 /* src/pages/AdminDashboard.css */
 
+/* ... (existing styles) ... */
+
+/* TABS STYLES */
+.tab-btn {
+  background: var(--bg-card);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #888;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  flex: 1;
+  /* evenly spaced tabs on mobile */
+  max-width: 200px;
+}
+
+.tab-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 15px rgba(144, 38, 143, 0.3);
+}
+
 /* --- GENERAL LAYOUT --- */
 .admin-container {
   padding-top: 40px;
@@ -8,9 +38,11 @@
   padding-bottom: 50px;
   max-width: 1400px;
   margin: 0 auto;
-  padding-left: 15px; /* Reduced for mobile safety */
+  padding-left: 15px;
+  /* Reduced for mobile safety */
   padding-right: 15px;
-  box-sizing: border-box; /* Ensures padding doesn't break width */
+  box-sizing: border-box;
+  /* Ensures padding doesn't break width */
 }
 
 /* Header Section */
@@ -72,12 +104,14 @@
   width: 100%;
   border-collapse: collapse;
   font-size: 0.95rem;
-  direction: rtl; /* Force Table to RTL for Arabic */
+  direction: rtl;
+  /* Force Table to RTL for Arabic */
 }
 
 .admin-table th {
   background: rgba(255, 255, 255, 0.03);
-  text-align: right; /* Arabic Alignment */
+  text-align: right;
+  /* Arabic Alignment */
   padding: 20px;
   color: #a1a1aa;
   font-weight: 600;
@@ -89,7 +123,8 @@
   padding: 20px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   vertical-align: middle;
-  text-align: right; /* Arabic Alignment */
+  text-align: right;
+  /* Arabic Alignment */
 }
 
 .table-row {
@@ -101,9 +136,21 @@
 }
 
 /* --- COLUMN STYLES --- */
-.date-cell { color: #888; white-space: nowrap; }
-.date-time { font-size: 0.8rem; opacity: 0.6; display: block; }
-.client-name { font-weight: bold; color: white; }
+.date-cell {
+  color: #888;
+  white-space: nowrap;
+}
+
+.date-time {
+  font-size: 0.8rem;
+  opacity: 0.6;
+  display: block;
+}
+
+.client-name {
+  font-weight: bold;
+  color: white;
+}
 
 /* WhatsApp Link */
 .wa-link {
@@ -118,17 +165,48 @@
   font-weight: 600;
   transition: 0.2s;
   white-space: nowrap;
-  max-width: 100%; /* Prevent overflow */
+  max-width: 100%;
+  /* Prevent overflow */
 }
-.wa-link:hover { background: rgba(37, 211, 102, 0.2); transform: translateY(-2px); }
+
+.wa-link:hover {
+  background: rgba(37, 211, 102, 0.2);
+  transform: translateY(-2px);
+}
 
 /* Amount Info */
-.amount-box { display: flex; flex-direction: column; gap: 4px; min-width: 120px; }
-.amount-row { display: flex; justify-content: space-between; gap: 10px; }
-.amount-row.paid { border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 4px; }
-.txt-label { color: #666; font-size: 0.85rem; }
-.txt-val { color: white; font-weight: bold; }
-.txt-green { color: #22c55e; font-weight: bold; }
+.amount-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 120px;
+}
+
+.amount-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.amount-row.paid {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 4px;
+}
+
+.txt-label {
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.txt-val {
+  color: white;
+  font-weight: bold;
+}
+
+.txt-green {
+  color: #22c55e;
+  font-weight: bold;
+}
 
 /* Receipt Button */
 .view-receipt-btn {
@@ -142,51 +220,119 @@
   display: inline-block;
   white-space: nowrap;
 }
-.view-receipt-btn:hover { background: rgba(227, 0, 91, 0.1); border-color: #e3005b; }
+
+.view-receipt-btn:hover {
+  background: rgba(227, 0, 91, 0.1);
+  border-color: #e3005b;
+}
 
 /* Status Badges */
-.status-badge { padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; white-space: nowrap; display: inline-block; }
-.status-pending { background: rgba(234, 179, 8, 0.15); color: #eab308; border: 1px solid rgba(234, 179, 8, 0.3); }
-.status-completed { background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
-.status-rejected { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.status-pending {
+  background: rgba(234, 179, 8, 0.15);
+  color: #eab308;
+  border: 1px solid rgba(234, 179, 8, 0.3);
+}
+
+.status-completed {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.status-rejected {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
 
 /* Action Buttons */
-.actions-cell { display: flex; gap: 8px; align-items: center; justify-content: flex-start; }
-.action-btn { width: 32px; height: 32px; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
-.action-btn:hover { transform: scale(1.1); }
-.btn-accept { background: #22c55e; }
-.btn-reject { background: #eab308; }
-.btn-delete { background: transparent; border: 1px solid #ef4444; color: #ef4444; }
-.btn-delete:hover { background: rgba(239, 68, 68, 0.1); }
+.actions-cell {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.action-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+.action-btn:hover {
+  transform: scale(1.1);
+}
+
+.btn-accept {
+  background: #22c55e;
+}
+
+.btn-reject {
+  background: #eab308;
+}
+
+.btn-delete {
+  background: transparent;
+  border: 1px solid #ef4444;
+  color: #ef4444;
+}
+
+.btn-delete:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
 
 /* --- RESPONSIVE CARD VIEW (Mobile) --- */
 @media (max-width: 900px) {
   .admin-table thead {
-    display: none; /* Hide headers on mobile */
+    display: none;
+    /* Hide headers on mobile */
   }
 
-  .admin-table, .admin-table tbody, .admin-table tr, .admin-table td {
+  .admin-table,
+  .admin-table tbody,
+  .admin-table tr,
+  .admin-table td {
     display: block;
     width: 100%;
-    box-sizing: border-box; /* CRITICAL FIX for width */
+    box-sizing: border-box;
+    /* CRITICAL FIX for width */
   }
 
   .table-row {
     margin-bottom: 20px;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 12px;
-    padding: 10px; /* Reduced padding inside card */
+    padding: 10px;
+    /* Reduced padding inside card */
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .admin-table td {
     display: flex;
-    justify-content: space-between; /* Push Label and Value apart */
+    justify-content: space-between;
+    /* Push Label and Value apart */
     align-items: center;
-    padding: 12px 5px; /* Minimal side padding inside rows */
+    padding: 12px 5px;
+    /* Minimal side padding inside rows */
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     text-align: right;
-    direction: rtl; /* Ensure Arabic order */
+    direction: rtl;
+    /* Ensure Arabic order */
   }
 
   .admin-table td:last-child {
@@ -200,19 +346,26 @@
     color: #888;
     font-weight: 600;
     font-size: 0.9rem;
-    margin-left: 10px; /* Space between label and value */
+    margin-left: 10px;
+    /* Space between label and value */
     white-space: nowrap;
-    min-width: 80px; /* Ensure labels align somewhat */
+    min-width: 80px;
+    /* Ensure labels align somewhat */
   }
 
   /* Value (Left Side) - FIXES CUTOFF */
-  .admin-table td > * {
-    text-align: left; /* Align values to the left */
-    flex: 1; /* Allow value to take remaining space */
-    direction: ltr; /* Keeps numbers/names correct */
+  .admin-table td>* {
+    text-align: left;
+    /* Align values to the left */
+    flex: 1;
+    /* Allow value to take remaining space */
+    direction: ltr;
+    /* Keeps numbers/names correct */
     display: flex;
-    justify-content: flex-end; /* Align content to the left end visually in RTL context */
-    overflow: hidden; /* Prevent spillover */
+    justify-content: flex-end;
+    /* Align content to the left end visually in RTL context */
+    overflow: hidden;
+    /* Prevent spillover */
     text-overflow: ellipsis;
   }
 
@@ -222,14 +375,15 @@
     padding: 6px 10px;
     font-size: 0.85rem;
   }
-  
+
   .amount-box {
     width: 100%;
     min-width: auto;
   }
 
   .actions-cell {
-    justify-content: flex-end; /* Center buttons on mobile or end */
+    justify-content: flex-end;
+    /* Center buttons on mobile or end */
     width: 100%;
   }
 }

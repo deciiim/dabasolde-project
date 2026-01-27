@@ -4,7 +4,7 @@ import { Pool } from 'pg';
 @Injectable()
 export class OrdersService {
   // Inject the database connection pool (Same pattern as PlansService)
-  constructor(@Inject('DATABASE_POOL') private pool: Pool) {}
+  constructor(@Inject('DATABASE_POOL') private pool: Pool) { }
 
   // --- ADMIN: Get all orders (Newest first) ---
   async findAll() {
@@ -35,8 +35,8 @@ export class OrdersService {
     // 2. Prepare Query
     const query = `
       INSERT INTO "Order" 
-      ("shortRef", amount, price, phone, "fullName", "paymentMethod", bank, "receiptImage", status)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'PENDING')
+      ("shortRef", amount, price, phone, "fullName", "paymentMethod", bank, "receiptImage", status, "productType")
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'PENDING', $9)
       RETURNING "shortRef"
     `;
 
@@ -49,17 +49,18 @@ export class OrdersService {
       data.fullName,
       data.paymentMethod,
       data.bank || null,
-      receiptFilename || null
+      receiptFilename || null,
+      data.productType || 'Standard Plan' // Default to 'Standard Plan' if not provided
     ];
 
     // 4. Execute
     const result = await this.pool.query(query, values);
     const newOrder = result.rows[0];
 
-    return { 
-      success: true, 
+    return {
+      success: true,
       orderId: newOrder.shortRef,
-      message: "Order created successfully" 
+      message: "Order created successfully"
     };
   }
 

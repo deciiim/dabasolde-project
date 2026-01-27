@@ -17,7 +17,7 @@ export default function Checkout() {
 
   // --- CONFIGURATION FROM ENV ---
   const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '212600000000';
-  
+
   // Bank Details Mapping
   const BANK_ACCOUNTS: Record<string, string> = {
     CIH: import.meta.env.VITE_RIB_CIH || '230 150 123456789012345678',
@@ -42,11 +42,15 @@ export default function Checkout() {
       navigate('/plans');
     } else {
       setPlan(location.state.plan);
+      // If phone was passed (from Recharge flow), prefill it
+      if (location.state.prefilledPhone) {
+        setPhone(location.state.prefilledPhone);
+      }
     }
   }, [location, navigate]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setErrorMessage(''); 
+    setErrorMessage('');
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
     }
@@ -73,6 +77,11 @@ export default function Checkout() {
       formData.append('phone', phone);
       formData.append('receipt', file);
 
+      // Add Product Type (Default to 'Inwi Plan' if not present)
+      // We check if plan object has 'productType' (from Recharge) or we assume Standard Plan
+      const pType = (plan as any).productType || 'Standard Plan';
+      formData.append('productType', pType);
+
       try {
         const res = await api.post('/orders', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
@@ -89,7 +98,10 @@ export default function Checkout() {
 
     } else {
       // WhatsApp Logic (Using Env Var)
-      const msg = `Salam DabaSolde, bghit compte Inwi ${plan?.amount}DH via CashPlus. Nom: ${name}`;
+      // Check if it's a Recharge or Plan to format message nicely
+      const pType = (plan as any).productType || 'Compte Inwi';
+
+      const msg = `Salam DabaSolde, bghit ${pType} de ${plan?.amount}DH via CashPlus. Prix: ${plan?.finalPrice}DH. Nom: ${name}, Tel: ${phone}`;
       const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
       window.location.href = waLink;
     }
@@ -101,16 +113,16 @@ export default function Checkout() {
   if (success) {
     return (
       <div className="checkout-wrapper">
-        <div className="checkout-card" style={{textAlign: 'center', padding: '50px 30px'}}>
-          <div style={{fontSize: '5rem', marginBottom: '20px'}}>🎉</div>
-          <h2 style={{color: '#22c55e', fontSize: '2.5rem', margin: '0 0 10px 0'}}>تم بنجاح!</h2>
-          <p style={{color: '#a1a1aa', fontSize: '1.2rem', margin: '0 0 40px 0'}}>
+        <div className="checkout-card" style={{ textAlign: 'center', padding: '50px 30px' }}>
+          <div style={{ fontSize: '5rem', marginBottom: '20px' }}>🎉</div>
+          <h2 style={{ color: '#22c55e', fontSize: '2.5rem', margin: '0 0 10px 0' }}>تم بنجاح!</h2>
+          <p style={{ color: '#a1a1aa', fontSize: '1.2rem', margin: '0 0 40px 0' }}>
             شكراً لثقتك بنا. تم استلام طلبك بنجاح وسيتم التواصل معك قريباً.
           </p>
-          <button 
-            onClick={() => navigate('/plans')} 
+          <button
+            onClick={() => navigate('/plans')}
             className="btn-submit"
-            style={{background: '#22c55e', marginTop: 0}}
+            style={{ background: '#22c55e', marginTop: 0 }}
           >
             العودة للعروض 🏠
           </button>
@@ -123,42 +135,42 @@ export default function Checkout() {
   return (
     <div className="checkout-wrapper">
       <div className="checkout-card">
-        
+
         <div className="checkout-header">
-          <h2 style={{textAlign: 'center', margin:0}}>إتمام الطلب 🛒</h2>
+          <h2 style={{ textAlign: 'center', margin: 0 }}>إتمام الطلب 🛒</h2>
         </div>
 
         {/* ORDER SUMMARY */}
         <div className="order-summary">
-          <div style={{marginBottom: '20px'}}>
-             <span className="summary-label">أنت تطلب حساب Inwi برصيد:</span>
-             <div className="price-row">
-                <span className="big-number">{plan.amount}</span>
-                <span className="currency-label">DH</span>
-             </div>
+          <div style={{ marginBottom: '20px' }}>
+            <span className="summary-label">أنت تطلب حساب Inwi برصيد:</span>
+            <div className="price-row">
+              <span className="big-number">{plan.amount}</span>
+              <span className="currency-label">DH</span>
+            </div>
           </div>
-          <div style={{borderTop: '1px solid rgba(255,255,255,0.1)', margin: '15px 0'}}></div>
+          <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', margin: '15px 0' }}></div>
           <div>
-             <span className="summary-label">المبلغ الواجب أداؤه:</span>
-             <div className="price-row total-price">
-                <span className="big-number">{plan.finalPrice}</span>
-                <span className="currency-label">DH</span>
-             </div>
+            <span className="summary-label">المبلغ الواجب أداؤه:</span>
+            <div className="price-row total-price">
+              <span className="big-number">{plan.finalPrice}</span>
+              <span className="currency-label">DH</span>
+            </div>
           </div>
         </div>
 
         <div className="form-group">
           <label className="form-label">اختر طريقة الدفع</label>
           <div className="payment-methods">
-            <button 
-              type="button" 
+            <button
+              type="button"
               className={`method-btn ${paymentMethod === 'CASH' ? 'active' : ''}`}
               onClick={() => setPaymentMethod('CASH')}
             >
               💵 كاش بلس
             </button>
-            <button 
-              type="button" 
+            <button
+              type="button"
               className={`method-btn ${paymentMethod === 'BANK' ? 'active' : ''}`}
               onClick={() => setPaymentMethod('BANK')}
             >
@@ -168,7 +180,7 @@ export default function Checkout() {
         </div>
 
         <form onSubmit={handleSubmit}>
-          
+
           {paymentMethod === 'BANK' && (
             <div className="animate-fade">
               <div className="form-group">
@@ -181,12 +193,12 @@ export default function Checkout() {
               </div>
 
               {/* DYNAMIC BANK DETAILS CARD */}
-              <div style={{background:'#111', padding:'15px', borderRadius:'10px', textAlign:'center', marginBottom:'20px', border:'1px solid #333'}}>
-                <span style={{color:'#888', fontSize:'0.9rem'}}>RIB للتحويل ({bank}):</span>
-                <span style={{display:'block', color:'#e3005b', fontFamily:'monospace', fontSize:'1.1rem', marginTop:'5px', letterSpacing:'1px', wordBreak: 'break-all'}}>
+              <div style={{ background: '#111', padding: '15px', borderRadius: '10px', textAlign: 'center', marginBottom: '20px', border: '1px solid #333' }}>
+                <span style={{ color: '#888', fontSize: '0.9rem' }}>RIB للتحويل ({bank}):</span>
+                <span style={{ display: 'block', color: '#e3005b', fontFamily: 'monospace', fontSize: '1.1rem', marginTop: '5px', letterSpacing: '1px', wordBreak: 'break-all' }}>
                   {BANK_ACCOUNTS[bank]}
                 </span>
-                <div style={{fontSize: '0.8rem', color: '#666', marginTop: '5px'}}>Name: Youssef Abayda</div>
+                <div style={{ fontSize: '0.8rem', color: '#666', marginTop: '5px' }}>Name: Youssef Abayda</div>
               </div>
 
               <div className="form-group">
@@ -201,22 +213,22 @@ export default function Checkout() {
 
               <div className="form-group">
                 <label className="form-label">صورة وصل التحويل (Reçu)</label>
-                <div style={{position:'relative'}}>
-                  <input 
-                    type="file" 
-                    id="receipt-upload" 
-                    style={{display:'none'}} 
-                    accept="image/*" 
+                <div style={{ position: 'relative' }}>
+                  <input
+                    type="file"
+                    id="receipt-upload"
+                    style={{ display: 'none' }}
+                    accept="image/*"
                     onChange={handleFileChange}
                     required
                   />
-                  <label 
-                    htmlFor="receipt-upload" 
+                  <label
+                    htmlFor="receipt-upload"
                     className={`custom-file-label ${file ? 'file-selected' : ''}`}
-                    style={errorMessage ? {borderColor: '#ef4444', background: 'rgba(239, 68, 68, 0.1)'} : {}}
+                    style={errorMessage ? { borderColor: '#ef4444', background: 'rgba(239, 68, 68, 0.1)' } : {}}
                   >
-                    <span style={{fontSize:'1.8rem', marginBottom:'10px'}}>{file ? '✅' : '📤'}</span>
-                    <span style={{fontWeight:'bold', color: file ? '#fff' : '#aaa'}}>
+                    <span style={{ fontSize: '1.8rem', marginBottom: '10px' }}>{file ? '✅' : '📤'}</span>
+                    <span style={{ fontWeight: 'bold', color: file ? '#fff' : '#aaa' }}>
                       {file ? `تم اختيار: ${file.name}` : 'اضغط لرفع صورة التوصيل'}
                     </span>
                   </label>
@@ -226,24 +238,24 @@ export default function Checkout() {
           )}
 
           {paymentMethod === 'CASH' && (
-            <div style={{textAlign: 'center', marginBottom: '30px', color: '#ccc', padding: '20px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)'}}>
-              <p style={{lineHeight: '1.6', margin:0}}>للدفع عبر وكالات CashPlus أو Wafacash، المرجو الضغط على الزر أسفله للتواصل معنا عبر الواتساب وتأكيد الطلب.</p>
+            <div style={{ textAlign: 'center', marginBottom: '30px', color: '#ccc', padding: '20px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <p style={{ lineHeight: '1.6', margin: 0 }}>للدفع عبر وكالات CashPlus أو Wafacash، المرجو الضغط على الزر أسفله للتواصل معنا عبر الواتساب وتأكيد الطلب.</p>
             </div>
           )}
 
           {errorMessage && (
-            <div style={{color: '#ef4444', background: 'rgba(239,68,68,0.1)', padding: '10px', borderRadius: '8px', marginBottom: '15px', textAlign: 'center', border: '1px solid rgba(239,68,68,0.3)'}}>
+            <div style={{ color: '#ef4444', background: 'rgba(239,68,68,0.1)', padding: '10px', borderRadius: '8px', marginBottom: '15px', textAlign: 'center', border: '1px solid rgba(239,68,68,0.3)' }}>
               {errorMessage}
             </div>
           )}
 
-          <button type="submit" className="btn-submit" disabled={isSubmitting} style={{opacity: isSubmitting ? 0.7 : 1}}>
+          <button type="submit" className="btn-submit" disabled={isSubmitting} style={{ opacity: isSubmitting ? 0.7 : 1 }}>
             {isSubmitting ? 'جاري الإرسال...' : (paymentMethod === 'BANK' ? 'تأكيد وإرسال الطلب ✅' : 'إتمام الطلب عبر الواتساب 💬')}
           </button>
         </form>
 
-        <button onClick={() => navigate('/plans')} style={{background:'none', border:'none', color:'#666', width:'100%', marginTop:'20px', cursor:'pointer', textDecoration:'underline', fontFamily: 'Cairo'}}>
-           إلغاء والرجوع
+        <button onClick={() => navigate('/plans')} style={{ background: 'none', border: 'none', color: '#666', width: '100%', marginTop: '20px', cursor: 'pointer', textDecoration: 'underline', fontFamily: 'Cairo' }}>
+          إلغاء والرجوع
         </button>
 
       </div>

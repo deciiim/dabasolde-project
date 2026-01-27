@@ -1,27 +1,106 @@
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap');
 
 :root {
-  --bg-dark: #000000;
-  --bg-card: #110d18;
+  /* Colors */
+  --bg-dark: #09090b;
+  --bg-card: #18181b;
+  --bg-input: #27272a;
+
   --primary: #90268f;
+  --primary-hover: #a92da8;
+  --primary-light: rgba(144, 38, 143, 0.2);
+
   --accent: #e3005b;
+  --accent-hover: #ff0066;
+
   --text-main: #ffffff;
-  --text-muted: #d1d5db; /* Lighter grey for better readability */
+  --text-muted: #a1a1aa;
+
+  /* Spacing & Borders */
+  --radius: 12px;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-glow: 0 0 15px rgba(144, 38, 143, 0.3);
+
+  /* Header Height */
+  --header-height: 80px;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
-  font-family: 'Cairo', sans-serif; /* Applied everywhere */
+  padding: 0;
+  font-family: 'Cairo', sans-serif;
   background-color: var(--bg-dark);
   color: var(--text-main);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
   direction: rtl;
+  /* Enforce RTL globally implies Arabic-first interface */
+  padding-top: 120px;
+  /* Global spacing for fixed navbar */
 }
 
+/* Modern Reset Utilities */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Global Layout Utilities */
 .container {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 0 1.5rem;
 }
 
-button { cursor: pointer; transition: 0.3s; }
-a { text-decoration: none; }
+/* Buttons */
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-card);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
