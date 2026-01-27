@@ -17,7 +17,7 @@ export default function Navbar() {
 
         {/* Logo */}
         <Link to="/" className="logo" onClick={closeMenu}>
-          Daba<span className="logo-highlight">Solde</span>
+          Solde<span className="logo-highlight">Daba</span>
           <span className="logo-icon">⚡</span>
         </Link>
 
