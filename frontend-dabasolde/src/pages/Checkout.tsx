@@ -68,6 +68,7 @@ export default function Checkout() {
 
       setIsSubmitting(true);
 
+
       const formData = new FormData();
       formData.append('amount', String(plan?.amount));
       formData.append('price', String(plan?.finalPrice));
@@ -81,6 +82,12 @@ export default function Checkout() {
       // We check if plan object has 'productType' (from Recharge) or we assume Standard Plan
       const pType = (plan as any).productType || 'Standard Plan';
       formData.append('productType', pType);
+
+      // Add recipient phone if it exists (from Recharge flow)
+      if (location.state?.prefilledPhone) {
+        formData.append('recipientPhone', location.state.prefilledPhone);
+      }
+
 
       try {
         const res = await api.post('/orders', formData, {

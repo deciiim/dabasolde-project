@@ -173,10 +173,26 @@ export default function AdminDashboard() {
                 <td data-label="الزبون" className="client-name">{order.fullName || 'Unknown'}</td>
 
                 <td data-label="رقم الهاتف">
-                  <a href={getWaLink(order.phone)} target="_blank" rel="noreferrer" className="wa-link">
-                    <WhatsAppIcon />
-                    {order.phone}
-                  </a>
+                  {/* Show recipient phone if it exists (for recharges) */}
+                  {order.recipientPhone ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                      <a href={getWaLink(order.recipientPhone)} target="_blank" rel="noreferrer" className="wa-link">
+                        <WhatsAppIcon />
+                        {order.recipientPhone}
+                        <span style={{ fontSize: '0.7rem', color: '#888', marginLeft: '5px' }}>(مستلم)</span>
+                      </a>
+                      <a href={getWaLink(order.phone)} target="_blank" rel="noreferrer" className="wa-link">
+                        <WhatsAppIcon />
+                        {order.phone}
+                        <span style={{ fontSize: '0.7rem', color: '#888', marginLeft: '5px' }}>(دافع)</span>
+                      </a>
+                    </div>
+                  ) : (
+                    <a href={getWaLink(order.phone)} target="_blank" rel="noreferrer" className="wa-link">
+                      <WhatsAppIcon />
+                      {order.phone}
+                    </a>
+                  )}
                 </td>
 
                 <td data-label="تفاصيل المبلغ">

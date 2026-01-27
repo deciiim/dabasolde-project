@@ -34,6 +34,7 @@ export class OrdersService {
         amount: data.amount,
         price: data.price,
         phone: data.phone,
+        recipientPhone: data.recipientPhone,
         fullName: data.fullName,
         paymentMethod: data.paymentMethod,
         bank: data.bank,
@@ -47,8 +48,8 @@ export class OrdersService {
       // 2. Prepare Query
       const query = `
         INSERT INTO "Order" 
-        ("shortRef", amount, price, phone, "fullName", "paymentMethod", bank, "receiptImage", status, "productType")
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'PENDING', $9)
+        ("shortRef", amount, price, phone, "recipientPhone", "fullName", "paymentMethod", bank, "receiptImage", status, "productType")
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'PENDING', $10)
         RETURNING "shortRef"
       `;
 
@@ -58,6 +59,7 @@ export class OrdersService {
         Number(data.amount),
         Number(data.price),
         data.phone,
+        data.recipientPhone || null, // Recipient phone (for recharges)
         data.fullName,
         data.paymentMethod,
         data.bank || null,
