@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS "RechargeConfig" (
 );
 
 -- Create index for faster queries
-CREATE INDEX idx_recharge_config_operator ON "RechargeConfig"(operator);
-CREATE INDEX idx_recharge_config_available ON "RechargeConfig"("isAvailable");
+CREATE INDEX IF NOT EXISTS idx_recharge_config_operator ON "RechargeConfig"(operator);
+CREATE INDEX IF NOT EXISTS idx_recharge_config_available ON "RechargeConfig"("isAvailable");
 
 -- Insert default configurations (all available by default)
 -- Operator-level configs (NULL rechargeCode means entire operator)
@@ -26,7 +26,7 @@ VALUES
   ('orange', NULL, true)
 ON CONFLICT (operator, "rechargeCode") DO NOTHING;
 
--- Inwi recharge types
+-- Inwi recharge types (11 types)
 INSERT INTO "RechargeConfig" (operator, "rechargeCode", "isAvailable") 
 VALUES 
   ('inwi', '*1', true),
@@ -37,19 +37,25 @@ VALUES
   ('inwi', '*6', true),
   ('inwi', '*7', true),
   ('inwi', '*8', true),
+  ('inwi', '*9', true),
   ('inwi', '*33', true),
   ('inwi', '*77', true)
 ON CONFLICT (operator, "rechargeCode") DO NOTHING;
 
--- Orange recharge types
+-- Orange recharge types (12 types)
 INSERT INTO "RechargeConfig" (operator, "rechargeCode", "isAvailable") 
 VALUES 
   ('orange', '*1', true),
+  ('orange', '*2', true),
   ('orange', '*3', true),
   ('orange', '*4', true),
   ('orange', '*5', true),
   ('orange', '*6', true),
+  ('orange', '*7', true),
   ('orange', '*8', true),
+  ('orange', '*22', true),
+  ('orange', '*33', true),
+  ('orange', '*77', true),
   ('orange', 'x25', true)
 ON CONFLICT (operator, "rechargeCode") DO NOTHING;
 
