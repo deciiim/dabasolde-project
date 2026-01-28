@@ -134,8 +134,8 @@ export default function Recharge() {
     const handleConfirm = () => {
         if (!phone || phone.length < 10) return;
 
-        // Calculate Final Price (-15% Discount)
-        const discount = 0.15;
+        // Calculate Final Price (-7.5% Discount)
+        const discount = 0.075;
         const finalPrice = selectedAmount * (1 - discount);
 
         navigate('/checkout', {
@@ -144,7 +144,7 @@ export default function Recharge() {
                     id: 0,
                     amount: selectedAmount,
                     finalPrice: parseFloat(finalPrice.toFixed(2)),
-                    discountPercent: 15,
+                    discountPercent: 7.5,
                     isActive: true,
                     createdAt: new Date().toISOString(),
                     productType: `تعبئة ${selectedOperator?.name} ${selectedType?.code} (${selectedAmount} درهم)`
@@ -160,7 +160,7 @@ export default function Recharge() {
             {/* HEADER */}
             <div className="recharge-header">
                 <h2>تعبئة رصيد ⚡</h2>
-                <p>اختر المشغل واستفد من تخفيض 15% على جميع التعبئات!</p>
+                <p>اختر المشغل واستفد من تخفيض 7.5% على جميع التعبئات!</p>
             </div>
 
             {/* STAGE 0: SELECT OPERATOR */}
@@ -260,7 +260,7 @@ export default function Recharge() {
 
                     <div className="amounts-list">
                         {AMOUNTS.map((amt) => {
-                            const discounted = amt * 0.85;
+                            const discounted = amt * 0.925;
                             return (
                                 <div
                                     key={amt}
@@ -297,7 +297,7 @@ export default function Recharge() {
                     <div className="final-price-display">
                         <span style={{ display: 'block', color: '#aaa', fontSize: '0.9rem' }}>المبلغ الذي ستدفعه</span>
                         <span className="price-tag" style={{ color: selectedOperator.color }}>
-                            {(selectedAmount * 0.85).toFixed(2)} درهم
+                            {(selectedAmount * 0.925).toFixed(2)} درهم
                         </span>
                     </div>
 
