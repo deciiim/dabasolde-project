@@ -1,15 +1,16 @@
 import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { Pool } from 'pg';
+import { CreateOrderDto } from './dto/create-order.dto';
 
 @Injectable()
 export class OrdersService {
   // Inject the database connection pool (Same pattern as PlansService)
-  constructor(@Inject('DATABASE_POOL') private pool: Pool) { }
+  constructor(@Inject('DATABASE_POOL') private pool: Pool) {}
 
   // --- ADMIN: Get all orders (Newest first) ---
   async findAll() {
     const result = await this.pool.query(
-      `SELECT * FROM "Order" ORDER BY "createdAt" DESC`
+      `SELECT * FROM "Order" ORDER BY "createdAt" DESC`,
     );
     return result.rows;
   }
@@ -18,7 +19,7 @@ export class OrdersService {
   async updateStatus(id: number, status: string) {
     const result = await this.pool.query(
       `UPDATE "Order" SET status = $1 WHERE id = $2 RETURNING *`,
-      [status, id]
+      [status, id],
     );
 
     if (result.rowCount === 0) {
@@ -28,7 +29,7 @@ export class OrdersService {
   }
 
   // --- PUBLIC: Create a new order (Direct Insert) ---
-  async create(data: any, receiptFilename: string | null) {
+  async create(data: CreateOrderDto, receiptFilename: string | null) {
     try {
       console.log('📦 Creating order with data:', {
         amount: data.amount,
@@ -39,7 +40,7 @@ export class OrdersService {
         paymentMethod: data.paymentMethod,
         bank: data.bank,
         productType: data.productType,
-        receiptFilename
+        receiptFilename,
       });
 
       // 1. Generate Tracking Ref
@@ -64,30 +65,30 @@ export class OrdersService {
         data.paymentMethod,
         data.bank || null,
         receiptFilename || null,
-        data.productType || 'Standard Plan' // Default to 'Standard Plan' if not provided
+        data.productType || 'Standard Plan', // Default to 'Standard Plan' if not provided
       ];
 
       console.log('📝 Executing query with values:', values);
 
       // 4. Execute
       const result = await this.pool.query(query, values);
-      const newOrder = result.rows[0];
+      const newOrder = result.rows[0] as { shortRef: string };
 
       console.log('✅ Order created successfully:', newOrder.shortRef);
 
       return {
         success: true,
         orderId: newOrder.shortRef,
-        message: "Order created successfully"
+        message: 'Order created successfully',
       };
     } catch (error) {
       console.error('❌ Error creating order:', error);
-      console.error('Error details:', {
-        message: error.message,
-        code: error.code,
-        detail: error.detail,
-        stack: error.stack
-      });
+      if (error instanceof Error) {
+        console.error('Error details:', {
+          message: error.message,
+          stack: error.stack,
+        });
+      }
       throw error; // Re-throw to let NestJS handle it
     }
   }
@@ -96,7 +97,7 @@ export class OrdersService {
   async findOne(ref: string) {
     const result = await this.pool.query(
       `SELECT * FROM "Order" WHERE "shortRef" = $1`,
-      [ref]
+      [ref],
     );
 
     if (result.rows.length === 0) {
@@ -109,7 +110,7 @@ export class OrdersService {
   async remove(id: number) {
     const result = await this.pool.query(
       `DELETE FROM "Order" WHERE id = $1 RETURNING *`,
-      [id]
+      [id],
     );
 
     if (result.rowCount === 0) {

@@ -9,17 +9,23 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   const configService = app.get(ConfigService);
-  // We keep these variables, but we won't strictly enforce the URL for CORS anymore
-  const frontendUrl = configService.get('FRONTEND_URL') || 'http://localhost:5173';
+  const frontendUrl =
+    configService.get('FRONTEND_URL') || 'http://localhost:5173';
+  const corsOrigin = configService.get('CORS_ORIGIN') || frontendUrl;
   const port = configService.get('PORT') || 3000;
+  const nodeEnv = configService.get('NODE_ENV') || 'development';
 
-  // --- FIX STARTS HERE ---
+  // --- CORS Configuration ---
+  // In development: Allow all origins for easier testing
+  // In production: Restrict to specific domain
   app.enableCors({
-    origin: true,      // <--- CHANGE THIS: 'true' allows both www and non-www
+    origin: nodeEnv === 'production' ? corsOrigin : true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
-  // --- FIX ENDS HERE ---
+  console.log(
+    `🔒 CORS enabled for: ${nodeEnv === 'production' ? corsOrigin : 'all origins (dev mode)'}`,
+  );
 
   // Ensure uploads directory exists
   const uploadsDir = join(process.cwd(), 'uploads');

@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Param, UploadedFile, UseInterceptors, UseGuards, Patch, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  UploadedFile,
+  UseInterceptors,
+  UseGuards,
+  Patch,
+  Delete,
+} from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -7,25 +18,25 @@ import { AuthGuard } from '@nestjs/passport';
 
 @Controller('orders')
 export class OrdersController {
-  constructor(private readonly ordersService: OrdersService) { }
+  constructor(private readonly ordersService: OrdersService) {}
 
   // --- PUBLIC ENDPOINTS ---
 
   @Post()
-  @UseInterceptors(FileInterceptor('receipt', {
-    storage: diskStorage({
-      destination: './uploads',
-      filename: (req, file, callback) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-        const ext = extname(file.originalname);
-        callback(null, `receipt-${uniqueSuffix}${ext}`);
-      },
+  @UseInterceptors(
+    FileInterceptor('receipt', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, callback) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const ext = extname(file.originalname);
+          callback(null, `receipt-${uniqueSuffix}${ext}`);
+        },
+      }),
     }),
-  }))
-  async create(
-    @Body() body: any,
-    @UploadedFile() file: Express.Multer.File
-  ) {
+  )
+  async create(@Body() body: any, @UploadedFile() file: Express.Multer.File) {
     try {
       console.log('📨 Received order request');
       console.log('Body:', body);

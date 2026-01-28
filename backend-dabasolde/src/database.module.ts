@@ -12,13 +12,17 @@ import { ConfigService } from '@nestjs/config';
         const databaseUrl = configService.get('DATABASE_URL');
 
         // --- ADD THIS LINE TO DEBUG ---
-        console.log("MY DATABASE URL IS:", databaseUrl);
+        console.log('MY DATABASE URL IS:', databaseUrl);
         // -----------------------------
 
-        const isLocal = databaseUrl.includes('localhost') || databaseUrl.includes('127.0.0.1');
+        const isLocal =
+          databaseUrl.includes('localhost') ||
+          databaseUrl.includes('127.0.0.1');
 
         // Append sslmode=require to connection string for production to suppress SSL warning
-        const connectionString = isLocal ? databaseUrl : `${databaseUrl}${databaseUrl.includes('?') ? '&' : '?'}sslmode=require`;
+        const connectionString = isLocal
+          ? databaseUrl
+          : `${databaseUrl}${databaseUrl.includes('?') ? '&' : '?'}sslmode=require`;
 
         return new Pool({
           connectionString,
@@ -29,4 +33,4 @@ import { ConfigService } from '@nestjs/config';
   ],
   exports: ['DATABASE_POOL'],
 })
-export class DatabaseModule { }
+export class DatabaseModule {}

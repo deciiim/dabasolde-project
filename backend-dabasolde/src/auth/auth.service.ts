@@ -7,7 +7,7 @@ export class AuthService {
   // 2. Inject ConfigService
   constructor(
     private jwtService: JwtService,
-    private configService: ConfigService 
+    private configService: ConfigService,
   ) {}
 
   async login(body: any) {

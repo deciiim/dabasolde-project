@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS "Order" (
   amount NUMERIC NOT NULL,
   price NUMERIC NOT NULL,
   phone VARCHAR(20) NOT NULL,
+  "recipientPhone" VARCHAR(20),
   "fullName" VARCHAR(100) NOT NULL,
   "paymentMethod" VARCHAR(20) NOT NULL,
   bank VARCHAR(50),
@@ -56,6 +57,7 @@ CREATE INDEX IF NOT EXISTS idx_order_shortref ON "Order"("shortRef");
 CREATE INDEX IF NOT EXISTS idx_order_status ON "Order"(status);
 CREATE INDEX IF NOT EXISTS idx_order_createdat ON "Order"("createdAt" DESC);
 CREATE INDEX IF NOT EXISTS idx_order_producttype ON "Order"("productType");
+CREATE INDEX IF NOT EXISTS idx_order_recipientphone ON "Order"("recipientPhone");
 
 -- ============================================
 -- 4. VERIFY TABLES WERE CREATED

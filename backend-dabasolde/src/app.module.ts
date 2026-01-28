@@ -7,6 +7,7 @@ import { DatabaseModule } from './database.module'; // <--- ADD THIS
 import { PlansModule } from './plans/plans.module';
 import { OrdersModule } from './orders/orders.module';
 import { AuthModule } from './auth/auth.module';
+import { RechargeConfigModule } from './recharge-config/recharge-config.module';
 
 @Module({
   imports: [
@@ -14,11 +15,12 @@ import { AuthModule } from './auth/auth.module';
       isGlobal: true,
     }),
     DatabaseModule, // <--- ADD THIS (replaces PrismaModule)
-    PlansModule, 
-    OrdersModule, 
+    PlansModule,
+    OrdersModule,
     AuthModule,
+    RechargeConfigModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
