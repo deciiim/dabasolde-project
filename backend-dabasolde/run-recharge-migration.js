@@ -3,17 +3,17 @@ const { Pool } = require('pg');
 require('dotenv').config();
 
 const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
+  connectionString: process.env.DATABASE_URL,
 });
 
 async function runMigration() {
-    const client = await pool.connect();
+  const client = await pool.connect();
 
-    try {
-        console.log('🚀 Starting migration...');
+  try {
+    console.log('🚀 Starting migration...');
 
-        // Create table
-        await client.query(`
+    // Create table
+    await client.query(`
       CREATE TABLE IF NOT EXISTS "RechargeConfig" (
         id SERIAL PRIMARY KEY,
         operator VARCHAR(50) NOT NULL,
@@ -25,25 +25,32 @@ async function runMigration() {
         UNIQUE(operator, "rechargeCode")
       );
     `);
-        console.log('✅ Table created');
+    console.log('✅ Table created');
 
-        // Create indexes
-        await client.query(`CREATE INDEX IF NOT EXISTS idx_recharge_config_operator ON "RechargeConfig"(operator);`);
-        await client.query(`CREATE INDEX IF NOT EXISTS idx_recharge_config_available ON "RechargeConfig"("isAvailable");`);
-        console.log('✅ Indexes created');
+    // Create indexes
+    await client.query(`CREATE INDEX IF NOT EXISTS idx_recharge_config_operator ON "RechargeConfig"(operator);`);
+    await client.query(`CREATE INDEX IF NOT EXISTS idx_recharge_config_available ON "RechargeConfig"("isAvailable");`);
+    console.log('✅ Indexes created');
 
-        // Insert operator-level configs
-        await client.query(`
-      INSERT INTO "RechargeConfig" (operator, "rechargeCode", "isAvailable") 
-      VALUES 
-        ('inwi', NULL, true),
-        ('orange', NULL, true)
-      ON CONFLICT (operator, "rechargeCode") DO NOTHING;
-    `);
-        console.log('✅ Operator configs inserted');
+    // Insert operator-level configs
+    // Insert operator-level configs (Check explicitly to avoid NULL unique constraint issue)
+    await client.query(`
+            INSERT INTO "RechargeConfig" (operator, "rechargeCode", "isAvailable")
+            SELECT 'inwi', NULL, true
+            WHERE NOT EXISTS (
+                SELECT 1 FROM "RechargeConfig" WHERE operator = 'inwi' AND "rechargeCode" IS NULL
+            );
 
-        // Insert Inwi recharge types
-        await client.query(`
+            INSERT INTO "RechargeConfig" (operator, "rechargeCode", "isAvailable")
+            SELECT 'orange', NULL, true
+            WHERE NOT EXISTS (
+                SELECT 1 FROM "RechargeConfig" WHERE operator = 'orange' AND "rechargeCode" IS NULL
+            );
+        `);
+    console.log('✅ Operator configs inserted');
+
+    // Insert Inwi recharge types
+    await client.query(`
       INSERT INTO "RechargeConfig" (operator, "rechargeCode", "isAvailable") 
       VALUES 
         ('inwi', '*1', true),
@@ -58,10 +65,10 @@ async function runMigration() {
         ('inwi', '*77', true)
       ON CONFLICT (operator, "rechargeCode") DO NOTHING;
     `);
-        console.log('✅ Inwi recharge types inserted');
+    console.log('✅ Inwi recharge types inserted');
 
-        // Insert Orange recharge types
-        await client.query(`
+    // Insert Orange recharge types
+    await client.query(`
       INSERT INTO "RechargeConfig" (operator, "rechargeCode", "isAvailable") 
       VALUES 
         ('orange', '*1', true),
@@ -73,18 +80,18 @@ async function runMigration() {
         ('orange', 'x25', true)
       ON CONFLICT (operator, "rechargeCode") DO NOTHING;
     `);
-        console.log('✅ Orange recharge types inserted');
+    console.log('✅ Orange recharge types inserted');
 
-        // Verify
-        const result = await client.query('SELECT COUNT(*) FROM "RechargeConfig"');
-        console.log(`\n🎉 Migration complete! Total records: ${result.rows[0].count}`);
+    // Verify
+    const result = await client.query('SELECT COUNT(*) FROM "RechargeConfig"');
+    console.log(`\n🎉 Migration complete! Total records: ${result.rows[0].count}`);
 
-    } catch (error) {
-        console.error('❌ Migration failed:', error);
-    } finally {
-        client.release();
-        await pool.end();
-    }
+  } catch (error) {
+    console.error('❌ Migration failed:', error);
+  } finally {
+    client.release();
+    await pool.end();
+  }
 }
 
 runMigration();

@@ -52,27 +52,53 @@ export class RechargeConfigService {
     }
 
     // Update configuration
+    // Update configuration
     async update(dto: UpdateRechargeConfigDto): Promise<RechargeConfig> {
         const rechargeCode = dto.rechargeCode === undefined ? null : dto.rechargeCode;
 
-        const result = await this.pool.query<RechargeConfigRow>(
-            `INSERT INTO "RechargeConfig" (operator, "rechargeCode", "isAvailable", "disabledReason", "updatedBy", "updatedAt")
-       VALUES ($1, $2, $3, $4, $5, NOW())
-       ON CONFLICT (operator, "rechargeCode") 
-       DO UPDATE SET 
-         "isAvailable" = $3,
-         "disabledReason" = $4,
-         "updatedBy" = $5,
-         "updatedAt" = NOW()
-       RETURNING *`,
-            [
-                dto.operator,
-                rechargeCode,
-                dto.isAvailable,
-                dto.disabledReason || null,
-                dto.updatedBy || null,
-            ],
+        // Check if config exists first to handle NULL uniqueness correctly
+        // (Postgres UNIQUE constraint treats NULLs as distinct by default)
+        const checkResult = await this.pool.query<{ id: number }>(
+            `SELECT id FROM "RechargeConfig" 
+             WHERE operator = $1 
+             AND (("rechargeCode" = $2) OR ("rechargeCode" IS NULL AND $2 IS NULL))`,
+            [dto.operator, rechargeCode]
         );
+
+        let result;
+
+        if (checkResult.rows.length > 0) {
+            // Update existing
+            result = await this.pool.query<RechargeConfigRow>(
+                `UPDATE "RechargeConfig" 
+                 SET "isAvailable" = $1,
+                     "disabledReason" = $2,
+                     "updatedBy" = $3,
+                     "updatedAt" = NOW()
+                 WHERE id = $4
+                 RETURNING *`,
+                [
+                    dto.isAvailable,
+                    dto.disabledReason || null,
+                    dto.updatedBy || null,
+                    checkResult.rows[0].id
+                ]
+            );
+        } else {
+            // Insert new
+            result = await this.pool.query<RechargeConfigRow>(
+                `INSERT INTO "RechargeConfig" (operator, "rechargeCode", "isAvailable", "disabledReason", "updatedBy", "updatedAt")
+                 VALUES ($1, $2, $3, $4, $5, NOW())
+                 RETURNING *`,
+                [
+                    dto.operator,
+                    rechargeCode,
+                    dto.isAvailable,
+                    dto.disabledReason || null,
+                    dto.updatedBy || null,
+                ]
+            );
+        }
 
         const row = result.rows[0];
         return {
