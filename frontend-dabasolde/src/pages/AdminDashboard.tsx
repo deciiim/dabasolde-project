@@ -112,9 +112,18 @@ export default function AdminDashboard() {
           <h2 className="admin-title">Admin Dashboard ⚡</h2>
           <p className="admin-subtitle">إدارة الطلبات والعمليات</p>
         </div>
-        <button onClick={logout} className="logout-btn">
-          تسجيل الخروج
-        </button>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button
+            onClick={() => navigate('/admin/recharge-config')}
+            className="logout-btn"
+            style={{ background: '#d946ef' }}
+          >
+            🎛️ إدارة التعبئات
+          </button>
+          <button onClick={logout} className="logout-btn">
+            تسجيل الخروج
+          </button>
+        </div>
       </div>
 
       {/* FILTER TABS */}

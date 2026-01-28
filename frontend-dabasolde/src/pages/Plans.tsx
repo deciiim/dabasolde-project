@@ -3,7 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import './Plans.css';
 
-interface Plan { id: string; title: string; originalPrice: number; finalPrice: number; amount: number; discount: number; }
+interface Plan {
+  id: number;
+  amount: number;
+  discountPercent: number;
+  isActive: boolean;
+  createdAt: string;
+  finalPrice: number;
+}
 
 export default function Plans() {
   const [plans, setPlans] = useState<Plan[]>([]);
@@ -23,14 +30,14 @@ export default function Plans() {
     if (!customAmount || customAmount < 100) return;
     const finalPrice = Math.round(customAmount - (customAmount * 0.15));
     const customPlan: Plan = {
-      id: 'custom',
-      title: `حساب مخصص (${customAmount} DH)`,
+      id: 0, // Custom plan ID
       amount: customAmount,
-      originalPrice: customAmount,
+      discountPercent: 15,
+      isActive: true,
+      createdAt: new Date().toISOString(),
       finalPrice: finalPrice,
-      discount: 15
     };
-    goToCheckout(customPlan);
+    navigate('/checkout', { state: { plan: customPlan } });
   };
 
   if (loading) return (
@@ -93,7 +100,7 @@ export default function Plans() {
         {/* --- STANDARD CARDS --- */}
         {plans.map((plan) => (
           <div key={plan.id} className="plan-card">
-            <div className="discount-badge">-{plan.discount}%</div>
+            <div className="discount-badge">-{plan.discountPercent}%</div>
 
             <div style={{ width: '100%' }}>
               <div className="account-icon" style={{ marginBottom: '5px' }}>📱</div>
@@ -133,7 +140,7 @@ export default function Plans() {
 
             <div style={{ width: '100%', marginTop: '20px' }}>
               <div className="price-container">
-                <span className="old-price">القيمة الحقيقية: {plan.originalPrice} DH</span>
+                <span className="old-price">القيمة الحقيقية: {plan.amount} DH</span>
                 <span className="final-price">تدفع فقط: {plan.finalPrice} DH</span>
               </div>
 

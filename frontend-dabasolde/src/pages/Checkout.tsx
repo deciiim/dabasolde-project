@@ -1,13 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import api from '../api';
+import type { CreateOrderResponse } from '../types/api.types';
+import { getErrorMessage } from '../utils/errorHandler';
 import './Checkout.css';
 
 // Define the shape of the Plan object for TypeScript safety
 interface Plan {
-  id: string;
+  id: number;
   amount: number;
   finalPrice: number;
+  productType?: string;
+}
+
+interface LocationState {
+  plan?: Plan;
+  prefilledPhone?: string;
 }
 
 export default function Checkout() {
@@ -38,13 +46,14 @@ export default function Checkout() {
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   useEffect(() => {
-    if (!location.state || !location.state.plan) {
+    const state = location.state as LocationState | null;
+    if (!state || !state.plan) {
       navigate('/plans');
     } else {
-      setPlan(location.state.plan);
+      setPlan(state.plan);
       // If phone was passed (from Recharge flow), prefill it
-      if (location.state.prefilledPhone) {
-        setPhone(location.state.prefilledPhone);
+      if (state.prefilledPhone) {
+        setPhone(state.prefilledPhone);
       }
     }
   }, [location, navigate]);
@@ -60,6 +69,8 @@ export default function Checkout() {
     e.preventDefault();
     setErrorMessage('');
 
+    if (!plan) return; // Guard against null plan
+
     if (paymentMethod === 'BANK') {
       if (!file) {
         setErrorMessage("⚠️ المرجو إرفاق صورة وصل التحويل للمتابعة");
@@ -70,8 +81,8 @@ export default function Checkout() {
 
 
       const formData = new FormData();
-      formData.append('amount', String(plan?.amount));
-      formData.append('price', String(plan?.finalPrice));
+      formData.append('amount', String(plan.amount));
+      formData.append('price', String(plan.finalPrice));
       formData.append('paymentMethod', 'BANK');
       formData.append('bank', bank);
       formData.append('fullName', name);
@@ -80,17 +91,18 @@ export default function Checkout() {
 
       // Add Product Type (Default to 'Inwi Plan' if not present)
       // We check if plan object has 'productType' (from Recharge) or we assume Standard Plan
-      const pType = (plan as any).productType || 'Standard Plan';
+      const pType = plan.productType || 'Standard Plan';
       formData.append('productType', pType);
 
       // Add recipient phone if it exists (from Recharge flow)
-      if (location.state?.prefilledPhone) {
-        formData.append('recipientPhone', location.state.prefilledPhone);
+      const state = location.state as LocationState | null;
+      if (state?.prefilledPhone) {
+        formData.append('recipientPhone', state.prefilledPhone);
       }
 
 
       try {
-        const res = await api.post('/orders', formData, {
+        const res = await api.post<CreateOrderResponse>('/orders', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
 
@@ -99,16 +111,17 @@ export default function Checkout() {
         }
       } catch (error) {
         console.error("Upload Error:", error);
-        setErrorMessage("❌ حدث خطأ أثناء الاتصال بالسيرفر. حاول مرة أخرى.");
+        const errorMsg = getErrorMessage(error);
+        setErrorMessage(`❌ ${errorMsg}`);
         setIsSubmitting(false);
       }
 
     } else {
       // WhatsApp Logic (Using Env Var)
       // Check if it's a Recharge or Plan to format message nicely
-      const pType = (plan as any).productType || 'Compte Inwi';
+      const pType = plan.productType || 'Compte Inwi';
 
-      const msg = `Salam DabaSolde, bghit ${pType} de ${plan?.amount}DH via CashPlus. Prix: ${plan?.finalPrice}DH. Nom: ${name}, Tel: ${phone}`;
+      const msg = `Salam DabaSolde, bghit ${pType} de ${plan.amount}DH via CashPlus. Prix: ${plan.finalPrice}DH. Nom: ${name}, Tel: ${phone}`;
       const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
       window.location.href = waLink;
     }
