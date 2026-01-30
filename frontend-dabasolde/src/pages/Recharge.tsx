@@ -7,8 +7,8 @@ import OperatorIcon from '../components/OperatorIcon';
 
 // --- DATA: OPERATORS ---
 const OPERATORS: { id: 'inwi' | 'orange', name: string, nameEn: string, color: string }[] = [
-    { id: 'inwi', name: 'تعبئة إنوي', nameEn: 'Inwi', color: '#e3005b' },
-    { id: 'orange', name: 'تعبئة أورانج', nameEn: 'Orange', color: '#ff6600' }
+    { id: 'inwi', name: 'خدمة تعبئة (Inwi)', nameEn: 'Inwi Service', color: '#e3005b' },
+    { id: 'orange', name: 'خدمة تعبئة (Orange)', nameEn: 'Orange Service', color: '#ff6600' }
 ];
 
 // --- DATA: INWI RECHARGE TYPES ---
@@ -161,8 +161,8 @@ export default function Recharge() {
 
             {/* HEADER */}
             <div className="recharge-header">
-                <h2>تعبئة رصيد ⚡</h2>
-                <p>اختر المشغل واستفد من تخفيض 7.5% على جميع التعبئات!</p>
+                <h2>تعبئة رصيد الهاتف ⚡</h2>
+                <p>اختر المشغل واستفد من تخفيض 7.5% على جميع خدمات التعبئة!</p>
             </div>
 
             {/* STAGE 0: SELECT OPERATOR */}
