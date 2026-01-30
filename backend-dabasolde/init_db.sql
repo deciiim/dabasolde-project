@@ -27,24 +27,24 @@ CREATE TABLE IF NOT EXISTS "Plan" (
 CREATE INDEX IF NOT EXISTS idx_plan_active ON "Plan"("isActive");
 CREATE INDEX IF NOT EXISTS idx_plan_amount ON "Plan"(amount);
 
--- Insert default plans with 15% discount
+-- Insert default plans with 12% discount
 INSERT INTO "Plan" (amount, "discountPercent", "isActive")
-SELECT 100, 15, true WHERE NOT EXISTS (SELECT 1 FROM "Plan" WHERE amount = 100);
+SELECT 100, 12, true WHERE NOT EXISTS (SELECT 1 FROM "Plan" WHERE amount = 100);
 
 INSERT INTO "Plan" (amount, "discountPercent", "isActive")
-SELECT 200, 15, true WHERE NOT EXISTS (SELECT 1 FROM "Plan" WHERE amount = 200);
+SELECT 200, 12, true WHERE NOT EXISTS (SELECT 1 FROM "Plan" WHERE amount = 200);
 
 INSERT INTO "Plan" (amount, "discountPercent", "isActive")
-SELECT 300, 15, true WHERE NOT EXISTS (SELECT 1 FROM "Plan" WHERE amount = 300);
+SELECT 300, 12, true WHERE NOT EXISTS (SELECT 1 FROM "Plan" WHERE amount = 300);
 
 INSERT INTO "Plan" (amount, "discountPercent", "isActive")
-SELECT 500, 15, true WHERE NOT EXISTS (SELECT 1 FROM "Plan" WHERE amount = 500);
+SELECT 500, 12, true WHERE NOT EXISTS (SELECT 1 FROM "Plan" WHERE amount = 500);
 
 INSERT INTO "Plan" (amount, "discountPercent", "isActive")
-SELECT 1000, 15, true WHERE NOT EXISTS (SELECT 1 FROM "Plan" WHERE amount = 1000);
+SELECT 1000, 12, true WHERE NOT EXISTS (SELECT 1 FROM "Plan" WHERE amount = 1000);
 
--- Update existing plans to 15% just in case they exist with old values
-UPDATE "Plan" SET "discountPercent" = 15 WHERE "discountPercent" != 15;
+-- Update existing plans to 12% just in case they exist with old values
+UPDATE "Plan" SET "discountPercent" = 12 WHERE "discountPercent" != 12;
 
 
 -- ============================================

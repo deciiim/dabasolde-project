@@ -13,7 +13,7 @@ interface PlanRow {
 @Injectable()
 export class PlansService {
   // Inject the pool we created in DatabaseModule
-  constructor(@Inject('DATABASE_POOL') private pool: Pool) {}
+  constructor(@Inject('DATABASE_POOL') private pool: Pool) { }
 
   async findAll(): Promise<PlanWithPrice[]> {
     // 1. Run the Raw SQL Query
@@ -24,13 +24,16 @@ export class PlansService {
 
     // 2. Transform the data (result.rows contains the actual data)
     return result.rows.map((plan: PlanRow) => {
-      const discountAmount = plan.amount * (plan.discountPercent / 100);
+      // FORCE 12% DISCOUNT POLICY
+      // This ensures the frontend sees 12% even if the database still has 15%
+      const discountPercent = 12;
+      const discountAmount = plan.amount * (discountPercent / 100);
       const finalPrice = plan.amount - discountAmount;
 
       return {
         id: plan.id,
         amount: plan.amount,
-        discountPercent: plan.discountPercent,
+        discountPercent: discountPercent,
         isActive: plan.isActive,
         createdAt: plan.createdAt,
         finalPrice: Math.round(finalPrice),

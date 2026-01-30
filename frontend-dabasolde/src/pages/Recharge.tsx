@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import './Recharge.css';
 
+import OperatorIcon from '../components/OperatorIcon';
+
 // --- DATA: OPERATORS ---
-const OPERATORS = [
-    { id: 'inwi', name: 'إنوي', nameEn: 'Inwi', color: '#e3005b', logo: '/inwi-logo.jpg' },
-    { id: 'orange', name: 'أورانج', nameEn: 'Orange', color: '#ff6600', logo: '/orange-logo.jpg' }
+const OPERATORS: { id: 'inwi' | 'orange', name: string, nameEn: string, color: string }[] = [
+    { id: 'inwi', name: 'تعبئة إنوي', nameEn: 'Inwi', color: '#e3005b' },
+    { id: 'orange', name: 'تعبئة أورانج', nameEn: 'Orange', color: '#ff6600' }
 ];
 
 // --- DATA: INWI RECHARGE TYPES ---
@@ -43,7 +45,7 @@ const ORANGE_RECHARGE_TYPES = [
 // --- DATA: AMOUNTS (Standard List) ---
 const AMOUNTS = [5, 10, 20, 25, 30, 50, 100, 200, 300, 500];
 
-type Operator = typeof OPERATORS[0];
+type Operator = { id: 'inwi' | 'orange', name: string, nameEn: string, color: string };
 type RechargeType = typeof INWI_RECHARGE_TYPES[0];
 
 interface RechargeConfig {
@@ -184,16 +186,9 @@ export default function Recharge() {
                                     onClick={() => handleOperatorSelect(operator)}
                                     style={{ borderColor: operator.color }}
                                 >
-                                    <img
-                                        src={operator.logo}
-                                        alt={operator.name}
-                                        style={{
-                                            width: '120px',
-                                            height: 'auto',
-                                            marginBottom: '15px',
-                                            borderRadius: '8px'
-                                        }}
-                                    />
+                                    <div style={{ marginBottom: '15px' }}>
+                                        <OperatorIcon operator={operator.id} size="lg" />
+                                    </div>
                                     <h3 className="operator-name" style={{ color: operator.color }}>
                                         {operator.name}
                                     </h3>

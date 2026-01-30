@@ -119,7 +119,7 @@ export default function Checkout() {
     } else {
       // WhatsApp Logic (Using Env Var)
       // Check if it's a Recharge or Plan to format message nicely
-      const pType = plan.productType || 'Compte Inwi';
+      const pType = plan.productType || 'Service Inwi';
 
       const msg = `Salam DabaSolde, bghit ${pType} de ${plan.amount}DH via CashPlus. Prix: ${plan.finalPrice}DH. Nom: ${name}, Tel: ${phone}`;
       const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
@@ -163,7 +163,7 @@ export default function Checkout() {
         {/* ORDER SUMMARY */}
         <div className="order-summary">
           <div style={{ marginBottom: '20px' }}>
-            <span className="summary-label">أنت تطلب حساب Inwi برصيد:</span>
+            <span className="summary-label">طلبك (خدمة متوافقة مع Inwi) برصيد:</span>
             <div className="price-row">
               <span className="big-number">{plan.amount}</span>
               <span className="currency-label">DH</span>

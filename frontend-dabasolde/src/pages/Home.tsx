@@ -12,12 +12,12 @@ export default function Home() {
         <div className="hero-text">
           <h1 className="hero-title">
             أسرع طريقة لشراء <br />
-            <span className="highlight">حسابات Inwi</span> في المغرب
+            <span className="highlight">تعبئة و خدمات Inwi</span> في المغرب *
           </h1>
 
           <p className="hero-desc">
-            مرحباً بك في <strong>DabaSolde</strong>. منصتك الأولى لشراء حسابات مشحونة برصيد إنوي بتخفيضات تصل إلى 15%.
-            <br />خدمة آمنة، تسليم فوري، ودعم تقني 24/7.
+            مرحباً بك في <strong>DabaSolde</strong>. منصتك الأولى لشراء تعبئات ورصيد (متوافق مع إنوي) بتخفيضات تصل إلى 12%.
+            <br />خدمة مستقلة، تسليم فوري، ودعم تقني 24/7.
           </p>
 
           <div className="hero-buttons">

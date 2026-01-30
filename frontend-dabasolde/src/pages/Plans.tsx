@@ -28,11 +28,11 @@ export default function Plans() {
 
   const handleCustomBuy = () => {
     if (!customAmount || customAmount < 100) return;
-    const finalPrice = Math.round(customAmount - (customAmount * 0.15));
+    const finalPrice = Math.round(customAmount - (customAmount * 0.12));
     const customPlan: Plan = {
       id: 0, // Custom plan ID
       amount: customAmount,
-      discountPercent: 15,
+      discountPercent: 12,
       isActive: true,
       createdAt: new Date().toISOString(),
       finalPrice: finalPrice,
@@ -49,8 +49,8 @@ export default function Plans() {
   return (
     <div className="plans-container container">
       <div className="plans-header">
-        <h2>شراء حسابات My Inwi 📱</h2>
-        <p>اختر الرصيد الذي يناسبك واستفد من تخفيض حصري -15%</p>
+        <h2>شراء حسابات مميزة 📱</h2>
+        <p>اختر الرصيد الذي يناسبك (خدمة مستقلة متوافقة مع إنوي)</p>
       </div>
 
       <div className="plans-grid">
@@ -80,7 +80,7 @@ export default function Plans() {
               {customAmount && customAmount >= 100 ? (
                 <>
                   <span className="old-price">قيمة الرصيد: {customAmount} DH</span>
-                  <span className="final-price">{Math.round(customAmount - (customAmount * 0.15))} DH</span>
+                  <span className="final-price">{Math.round(customAmount - (customAmount * 0.12))} DH</span>
                 </>
               ) : (
                 <span style={{ color: '#666', fontSize: '0.9rem' }}>أدخل المبلغ لرؤية الثمن</span>
@@ -135,7 +135,7 @@ export default function Plans() {
                 </span>
               </div>
 
-              <div style={{ color: '#a1a1aa', fontSize: '0.9rem', marginTop: '5px' }}>رصيد حساب Inwi</div>
+              <div style={{ color: '#a1a1aa', fontSize: '0.9rem', marginTop: '5px' }}>رصيد (*6) متوافق مع إنوي</div>
             </div>
 
             <div style={{ width: '100%', marginTop: '20px' }}>
